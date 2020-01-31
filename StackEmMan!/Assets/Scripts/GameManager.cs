@@ -9,8 +9,6 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject _playerPrefab;
 
-    public bool LocalPlay = false;
-
     private void Awake()
     {
         if (!_instance)
@@ -47,12 +45,10 @@ public class GameManager : MonoBehaviour
             0.0f, //y
             Random.Range(-5, 5)); //z
 
-        if (LocalPlay)
-        {
-            toSpawn.transform.SetParent(parentToSet);
-            toSpawn.transform.position = randomPos;
-            //TODO: Enable the actual PlayerController toSpawn.GetComponent<SantaController>().enabled = true;
-        }
+        toSpawn.transform.SetParent(parentToSet);
+        toSpawn.transform.position = randomPos;
+        //TODO: Enable the actual PlayerController toSpawn.GetComponent<SantaController>().enabled = true;
+       
     }
 
 }

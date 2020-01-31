@@ -21,4 +21,8 @@ public class ChallengeManager : MonoBehaviour
 
         }
     }
+    public Clock[] GetClocksNeeded()
+    {
+        return ClocksNeeded.ToArray();
+    }
 }

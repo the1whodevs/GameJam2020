@@ -58,7 +58,7 @@ public class JoystickManager : MonoBehaviour
 
     void InitializeJoysticks()
     {
-        _joysticks = new Joystick[4];
+        _joysticks = new Joystick[2];
 
         for (int i = 0; i < _joysticks.Length; i++)
         {
@@ -85,9 +85,9 @@ public class JoystickManager : MonoBehaviour
     {
         public bool Assigned = false;
 
-        private int _joyNumber; //this SHOULD be either 1, 2, 3 or 4.
+        private int _joyNumber; //this SHOULD be either 1 or 2
 
-        public string fireButtonAxis { get; private set; }
+        public KeyCode interactButton { get; private set; }
 
         public string horizontalMoveAxis { get; private set; }
         public string verticalMoveAxis { get; private set; }
@@ -100,8 +100,6 @@ public class JoystickManager : MonoBehaviour
         public Joystick(int num)
         {
             _joyNumber = num;
-
-            fireButtonAxis = "FireJ" + num;
 
             horizontalMoveAxis = "HorizontalMoveJ" + num;
             verticalMoveAxis = "VerticalMoveJ" + num;
@@ -116,16 +114,18 @@ public class JoystickManager : MonoBehaviour
             {
                 case 1:
                     startButton = KeyCode.Joystick1Button7;
+                    interactButton = KeyCode.Joystick1Button0;
                     break;
                 case 2:
                     startButton = KeyCode.Joystick2Button7;
+                    interactButton = KeyCode.Joystick2Button0;
                     break;
-                case 3:
-                    startButton = KeyCode.Joystick3Button7;
-                    break;
-                case 4:
-                    startButton = KeyCode.Joystick4Button7;
-                    break;
+                //case 3:
+                //    startButton = KeyCode.Joystick3Button7;
+                //    break;
+                //case 4:
+                //    startButton = KeyCode.Joystick4Button7;
+                //    break;
                 default:
                     startButton = KeyCode.None;
                     break;

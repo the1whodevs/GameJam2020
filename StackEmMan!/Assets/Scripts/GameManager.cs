@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
 
         toSpawn.transform.SetParent(parentToSet);
         toSpawn.transform.position = randomPos;
-        //TODO: Enable the actual PlayerController toSpawn.GetComponent<SantaController>().enabled = true;
+        toSpawn.GetComponent<PlayerController>().enabled = true;
        
     }
 

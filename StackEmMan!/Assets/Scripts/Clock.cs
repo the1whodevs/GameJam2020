@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Clock : MonoBehaviour
 {
+    public GameObject[] clockComponents;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,5 +16,9 @@ public class Clock : MonoBehaviour
     void Update()
     {
         
+    }
+    public GameObject[] GetClockComponents()
+    {
+        return clockComponents;
     }
 }

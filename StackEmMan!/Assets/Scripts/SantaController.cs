@@ -7,7 +7,7 @@ public class SantaController : MonoBehaviour
 {
 
 
-    public bool Running;
+    public bool Running; 
 
     public float Speed = 1.0f;
 
@@ -61,12 +61,14 @@ public class SantaController : MonoBehaviour
 
     void CheckInput(JoystickManager.Joystick localPlayerJoystick)
     {
-        Running = !(Mathf.Approximately(Input.GetAxis(localPlayerJoystick.horizontalMoveAxis), 0.0f) && Mathf.Approximately(Input.GetAxis(localPlayerJoystick.verticalMoveAxis), 0.0f));
+        Running = !
+            (Mathf.Approximately(Input.GetAxis(localPlayerJoystick.horizontalMoveAxis), 0.0f) && 
+            Mathf.Approximately (Input.GetAxis(localPlayerJoystick.verticalMoveAxis), 0.0f));
     }
 
     void Rotate()
     {
-        RaycastHit hit;
+        //RaycastHit hit;
        // Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
 
         //if (Physics.Raycast(ray, out hit))

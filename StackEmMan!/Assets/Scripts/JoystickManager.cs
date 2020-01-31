@@ -37,21 +37,21 @@ public class JoystickManager : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Joystick3Button7))
-        {
-            if (GetJoystick(3).Assigned)
-            {
-                PlayerManager.GetInstance().AssignJoystickToPlayer(3);
-            }
-        }
+        //if (Input.GetKeyDown(KeyCode.Joystick3Button7))
+        //{
+        //    if (GetJoystick(3).Assigned)
+        //    {
+        //        PlayerManager.GetInstance().AssignJoystickToPlayer(3);
+        //    }
+        //}
 
-        if (Input.GetKeyDown(KeyCode.Joystick4Button7))
-        {
-            if (GetJoystick(4).Assigned)
-            {
-                PlayerManager.GetInstance().AssignJoystickToPlayer(4);
-            }
-        }
+        //if (Input.GetKeyDown(KeyCode.Joystick4Button7))
+        //{
+        //    if (GetJoystick(4).Assigned)
+        //    {
+        //        PlayerManager.GetInstance().AssignJoystickToPlayer(4);
+        //    }
+        //}
     }
 
 

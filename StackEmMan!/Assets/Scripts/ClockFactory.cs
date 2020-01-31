@@ -10,6 +10,22 @@ public class ClockFactory : MonoBehaviour
     [SerializeField] private List<GameObject> frames;
     [SerializeField] private List<GameObject> numbers;
 
+    public static ClockFactory instance;
+
+    private void Awake()
+    {
+        if (!instance)
+        {
+            instance = this;
+        }
+    }
+
+    public GameObject GetRandomComponent()
+    {
+        // TODO....
+        return new GameObject("FIX ME!");
+    }
+
     public GameObject GetNewClock(int totalClockComponents)
     {
         int cogCount = totalClockComponents - 5;

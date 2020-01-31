@@ -6,9 +6,11 @@ public class ChallengeManager : MonoBehaviour
 {
     int numOfComponentsPerClock;
     int numOfClocks;
-    List<Clock> ClocksNeeded;
-    List<GameObject> ClockCompsNeeded;
-    public bool CheckChallengeComplete;
+
+    [SerializeField] private int numberOfExtraComponents;
+
+    List<GameObject> ClocksNeeded;
+    List<List<GameObject>> ClockCompsNeeded;
 
     void Start()
     {
@@ -19,23 +21,23 @@ public class ChallengeManager : MonoBehaviour
     {
         for (int i = 0; i < numOfClocks; i++)
         {
-
+            ClocksNeeded.Add(ClockFactory.instance.GetNewClock(numOfComponentsPerClock));
         }
     }
-    public Clock[] GetClocksNeeded()
+
+    public bool CheckChallengeComplete()
     {
-        return ClocksNeeded.ToArray();
+        return true;
     }
+
     public void FillWithClockComps()
     {
-        Clock[] clocks = GetClocksNeeded();
-        for (int i = 0; i < clocks.Length; i++)
-        {
-            GameObject[] comps = clocks[i].GetClockComponents();
-            for (int j = 0; j < comps.Length; j++)
-            {
-                ClockCompsNeeded.Add(comps[j]);
-            }
-        }
+        // For each clock...
+            // Make a list and ...
+            // For each component..
+                // Add the component to the clock's list
+            // Then, add "numberOfExtraComponenets" in the clock's list, using ClockFactory.instance.GetRandomComponent()
+            // Add the clock's list, to the "ClockCompsNeeded" list
+        
     }
 }

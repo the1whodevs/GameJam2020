@@ -1,11 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
-using Photon.Realtime;
 using TMPro;
 
-public class GameManager : MonoBehaviourPunCallbacks
+public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
 
@@ -39,11 +37,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             0.0f, //y
             Random.Range(-5, 5)); //z
 
-        if (!LocalPlay)
-        {
-            GameObject spawnedPlayer = PhotonNetwork.Instantiate(toSpawn.name, randomPos, Quaternion.identity);
-            spawnedPlayer.GetComponentInChildren<TextMeshProUGUI>().text = PhotonNetwork.NickName;
-        }
     }
 
     void SpawnRandom(GameObject toSpawn, Transform parentToSet)
@@ -58,24 +51,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             toSpawn.transform.SetParent(parentToSet);
             toSpawn.transform.position = randomPos;
-            toSpawn.GetComponent<SantaController>().enabled = true;
+            //TODO: Enable the actual PlayerController toSpawn.GetComponent<SantaController>().enabled = true;
         }
     }
 
-    public override void OnJoinedRoom()
-    {
-        if (!LocalPlay)
-        {
-            Debug.Log("Player joined the room!");
-            SpawnRandom(_playerPrefab);
-        }
-    }
-
-    public override void OnPlayerLeftRoom(Player otherPlayer)
-    {
-        if (!LocalPlay)
-        {
-            Debug.Log(otherPlayer.NickName + " left the room, what a weakling!"); 
-        }
-    }
 }

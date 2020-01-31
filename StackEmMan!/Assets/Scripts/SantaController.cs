@@ -7,7 +7,7 @@ public class SantaController : MonoBehaviour
 {
 
 
-    public bool Running;
+    public bool Running; 
 
     public float Speed = 1.0f;
 

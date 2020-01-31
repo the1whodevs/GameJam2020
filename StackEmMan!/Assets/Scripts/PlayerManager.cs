@@ -41,22 +41,22 @@ public class PlayerManager : MonoBehaviour
         if (_player1.IsAvailable)
         {
             _player1.EnableAndAssignJoystick(joyNum);
-            UIManager.GetInstance().EnablePlayer(1);
+            //UIManager.GetInstance().EnablePlayer(1);
         }
         else if (_player2.IsAvailable)
         {
             _player2.EnableAndAssignJoystick(joyNum);
-            UIManager.GetInstance().EnablePlayer(2);
+            //UIManager.GetInstance().EnablePlayer(2);
         }
         else if (_player3.IsAvailable)
         {
             _player3.EnableAndAssignJoystick(joyNum);
-            UIManager.GetInstance().EnablePlayer(3);
+            //UIManager.GetInstance().EnablePlayer(3);
         }
         else if (_player4.IsAvailable)
         {
             _player4.EnableAndAssignJoystick(joyNum);
-            UIManager.GetInstance().EnablePlayer(4);
+            //UIManager.GetInstance().EnablePlayer(4);
         }
         else
         {

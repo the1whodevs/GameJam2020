@@ -5,7 +5,7 @@ using Unity;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float _moveSpeed;
+    [SerializeField] private float _moveSpeed = 20.0f;
     [SerializeField] private Rigidbody _rb;
 
 
@@ -26,31 +26,23 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (GameManager.GetInstance())
-        {
-            Move();
-        }
+
+        Debug.Log("Iam trying to move");
+        Move();
+        
     }
 
     void Move()
     {
+
+        transform.forward = new Vector3(Input.GetAxis(_joystick.horizontalMoveAxis), 0.0f, Input.GetAxis(_joystick.verticalMoveAxis));
+
         float horizontal = Input.GetAxis(_joystick.horizontalMoveAxis);
         float vertical = Input.GetAxis(_joystick.verticalMoveAxis);
 
         Vector3 translation = new Vector3(horizontal, 0.0f, vertical) * Time.deltaTime * _moveSpeed;
 
         _rb.AddForce(translation, ForceMode.Impulse);
-    }
-
-    void Rotate()
-    {
-        float horizontal = Input.GetAxis(_joystick.horizontalLookAxis);
-        float vertical = Input.GetAxis(_joystick.verticalLookAxis);
-
-        Vector3 direction = new Vector3(horizontal, 0.0f, vertical);
-
-        transform.LookAt(direction);
-
     }
 
     void CheckInput()

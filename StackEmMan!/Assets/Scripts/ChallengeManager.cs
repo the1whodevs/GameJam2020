@@ -27,6 +27,16 @@ public class ChallengeManager : MonoBehaviour
         }
     }
 
+    public Clock GetCurrentClock()
+    {
+        if (currentIndex < 0)
+        {
+            Debug.LogError("Trying to get Current Clock but index is " + currentIndex);
+        }
+
+        return ClocksNeeded[currentIndex - 1].GetComponent<Clock>();
+    }
+
     public bool CheckChallengeComplete(GameObject itemDelivered)
     {
         return true;

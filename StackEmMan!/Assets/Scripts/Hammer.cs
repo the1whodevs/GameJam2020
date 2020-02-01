@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Hammer : Tool {
 
-    int itemInUse = false;
+    bool itemInUse = false;
     
     public override void Use()
     {

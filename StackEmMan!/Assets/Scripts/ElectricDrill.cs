@@ -6,9 +6,10 @@ public class ElectricDrill : Tool
 {
     [SerializeField] private int _maxBattery = 100;
     [SerializeField] private int _currentBattery;
+
     [SerializeField] float drillTimer = 10.0f;
     
-    int itemInUse = false;
+    bool itemInUse = false;
 
     public override void Use()
     {

@@ -33,7 +33,7 @@ public class Clock : MonoBehaviour
             Instantiate(cogs[i], cogSide.transform);
         }
 
-        cogSide.SetActive(false);
+        cogSide.transform.position = frontSide.transform.position + transform.right * 1.25f;
     }
 
     public GameObject[] GetClockComponents()

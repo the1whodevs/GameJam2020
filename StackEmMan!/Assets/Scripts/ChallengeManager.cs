@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ChallengeManager : MonoBehaviour
 {
+    int currentIndex = 0;
+
     int numOfComponentsPerClock;
     int numOfClocks;
 
@@ -25,26 +27,35 @@ public class ChallengeManager : MonoBehaviour
         }
     }
 
-    public bool CheckChallengeComplete()
+    public bool CheckChallengeComplete(GameObject itemDelivered)
     {
         return true;
+    }
+
+    /// <summary>
+    /// Make sure there is a next clock before calling this!
+    /// </summary>
+    /// <returns></returns>
+    public List<GameObject> GetNextClock()
+    {
+        List<GameObject> nextClock = ClockCompsNeeded[currentIndex];
+        currentIndex++;
+        return nextClock;
     }
 
     public void FillWithClockComps()
     {
         for (int i = 0; i < ClocksNeeded.Count; i++)
         {
-            // For each clock...
-            // Make a list and ...
             List<GameObject> clockList=new List<GameObject>();
+
             GameObject[] comps = ClocksNeeded[i].GetComponent<Clock>().GetClockComponents();
 
             for (int j = 0; j < comps.Length; j++)
             {
-                // For each component..
-                // Add the component to the clock's list
                 clockList.Add(comps[j]);
             }
+
             for (int j = 0; j < numberOfExtraComponents; j++)
             {
                 clockList.Add(ClockFactory.instance.GetRandomComponent());
@@ -52,10 +63,5 @@ public class ChallengeManager : MonoBehaviour
 
             ClockCompsNeeded.Add(clockList);
         }
-        
-            
-            // Then, add "numberOfExtraComponents" in the clock's list, using ClockFactory.instance.GetRandomComponent()
-            // Add the clock's list, to the "ClockCompsNeeded" list
-        
     }
 }

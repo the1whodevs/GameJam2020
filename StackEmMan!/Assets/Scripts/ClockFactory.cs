@@ -73,9 +73,9 @@ public class ClockFactory : MonoBehaviour
         }
     }
 
-    public GameObject GetNewClock(int totalClockComponents)
+    public GameObject GetNewClock(int numOfCogs)
     {
-        int cogCount = totalClockComponents - 5;
+        int cogCount = numOfCogs < 0 ? 0 : numOfCogs;
 
         Clock newClock = new Clock();
 
@@ -101,14 +101,6 @@ public class ClockFactory : MonoBehaviour
             );
 
         return clock;
-    }
-
-    private void OnGUI()
-    {
-        if (GUILayout.Button("Make a clock plis!"))
-        {
-            GetNewClock(8);
-        }
     }
 
     private GameObject GetRandomCog()

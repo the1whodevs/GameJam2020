@@ -7,25 +7,37 @@ using Random = UnityEngine.Random;
 public class SpawnManager : MonoBehaviour
 {
     private ChallengeManager challengeManager;
-    private ConveyorBelt conveyorBelt;
+
     private int NumberOfClockComps;
     
     [SerializeField] private float spawnInterval { get; set; }
-    [SerializeField] private Transform SpawnPoint;
-    private Queue<GameObject> ConveyorBeltQueue;
+
+    private Queue<GameObject> ConveyorBeltQueue = new Queue<GameObject>();
+
     private GameObject[] conveyorObjects;
 
     public void Awake()
     {
+        challengeManager = GameObject.Find("ChallengeManager").GetComponent<ChallengeManager>();
+
         conveyorObjects = GameObject.FindGameObjectsWithTag("ConveyorBelt");
+
         for (int i = 0; i <conveyorObjects.Length ; i++)
         {
             ConveyorBeltQueue.Enqueue(conveyorObjects[i]);
             conveyorObjects[i].GetComponent<ConveyorBelt>().ItemDeactivated += ConveyorBelt_ItemDeactivated;
             conveyorObjects[i].SetActive(false);
-            conveyorBelt.IsRunning = false;
+            conveyorObjects[i].GetComponent<ConveyorBelt>().IsRunning = false;
         }
  
+    }
+
+    private void OnGUI()
+    {
+        if (GUILayout.Button("Press me plis"))
+        {
+            Spawn();
+        }
     }
 
     private IEnumerator ConveyorBeltSpawn()
@@ -36,7 +48,7 @@ public class SpawnManager : MonoBehaviour
             {
                 GameObject o = ConveyorBeltQueue.Dequeue();
                 o.SetActive(true);
-                conveyorBelt.IsRunning = true;
+                o.GetComponent<ConveyorBelt>().IsRunning = true;
                 yield return new WaitForSeconds(spawnInterval);
             }
         }
@@ -44,7 +56,6 @@ public class SpawnManager : MonoBehaviour
         {
             Debug.LogError("ConveyorBeltQueue is Empty");
         }
-       
     }
 
     protected void ConveyorBelt_ItemDeactivated(object sender,EventArgs eventArgs)
@@ -71,7 +82,8 @@ public class SpawnManager : MonoBehaviour
             }
         }
 
-        List<GameObject> nextClock = challengeManager.GetNextClock();
+        List<GameObject> nextClock = new List<GameObject>();
+        nextClock = challengeManager.GetNextClock();
 
         for (int i = 0; i < nextClock.Count; i++)
         {

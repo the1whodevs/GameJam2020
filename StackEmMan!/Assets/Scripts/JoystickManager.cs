@@ -8,6 +8,8 @@ public class JoystickManager : MonoBehaviour
 
     private Joystick[] _joysticks; //up to 4 local players!
 
+
+
     void Awake()
     {
         if (!_instance)
@@ -21,6 +23,7 @@ public class JoystickManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         if (Input.GetKeyDown(KeyCode.Joystick1Button7))
         {
             if (!GetJoystick(1).Assigned)

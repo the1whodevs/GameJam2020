@@ -27,7 +27,6 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
 
-        Debug.Log("Iam trying to move");
         Move();
         
     }
@@ -43,6 +42,17 @@ public class PlayerController : MonoBehaviour
         Vector3 translation = new Vector3(horizontal, 0.0f, vertical) * Time.deltaTime * _moveSpeed;
 
         _rb.AddForce(translation, ForceMode.Impulse);
+    }
+
+    void Interact()
+    {
+        //bool isHolding;
+        //_joystick.interactButton
+        if (Input.GetKey(_joystick.interactButton))
+        {
+
+            //isHolding = true;
+        }
     }
 
     void CheckInput()

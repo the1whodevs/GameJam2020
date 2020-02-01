@@ -12,12 +12,15 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _p1PressStart;
     [SerializeField] private GameObject _p2PressStart;
 
+    //[HideInInspector] public LocalPlayer _player1;
+    //[HideInInspector] public LocalPlayer _player2;
+
     void Awake()
     {
         if (!instance)
         {
             instance = this;
-
+           
             _p1Ready.SetActive(false);
             _p2Ready.SetActive(false);
 
@@ -29,7 +32,6 @@ public class UIManager : MonoBehaviour
 
     public void EnablePlayer(int playerNum)
     {
-
 
         if (playerNum == 1)
 	    {

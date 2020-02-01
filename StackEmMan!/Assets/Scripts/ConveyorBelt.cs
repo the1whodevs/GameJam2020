@@ -8,17 +8,22 @@ public class ConveyorBelt : MonoBehaviour
     public event EventHandler ItemDeactivated;
 
     public int ID;
+
     public float StartingSpeed;
-    public float CurrentSpeed;
     public static Vector3 Velocity;
     public string BoundaryTag;
     public Transform[] SpawnPoints;
 
     [HideInInspector]
     public bool IsRunning;  //MOVING ITEMS MUST BE ENABLED BY THE SPAWNER
+
+    [SerializeField] private float currentSpeed;
+
     private bool actionInProgress;
 
     private Vector3 startingPosition;
+
+    public float CurrentSpeed => currentSpeed;
 
     void Awake()
     {
@@ -27,7 +32,7 @@ public class ConveyorBelt : MonoBehaviour
 
 
         Velocity = StartingSpeed * Vector3.left;
-        CurrentSpeed = StartingSpeed;
+        currentSpeed = StartingSpeed;
 
         gameObject.SetActive(false);
         

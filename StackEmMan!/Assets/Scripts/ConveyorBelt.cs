@@ -27,6 +27,7 @@ public class ConveyorBelt : MonoBehaviour
 
     void Awake()
     {
+        //TODO : Dont Destroy OnLoad
 
         //GUIManager.GameReset += GuiManager_GameReset;
 
@@ -58,13 +59,13 @@ public class ConveyorBelt : MonoBehaviour
 
     protected virtual void ResetItem()
     {
-        IsRunning = false;
+        //IsRunning = false;
 
 
         //reset position
         transform.position = startingPosition;
 
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
 
         //raise event so that the Spawner will manage the item properly, and also deactivate active SpawnPoints and Items
         OnItemDeactivated(EventArgs.Empty);

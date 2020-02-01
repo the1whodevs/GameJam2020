@@ -37,21 +37,6 @@ public class JoystickManager : MonoBehaviour
             }
         }
 
-        //if (Input.GetKeyDown(KeyCode.Joystick3Button7))
-        //{
-        //    if (GetJoystick(3).Assigned)
-        //    {
-        //        PlayerManager.GetInstance().AssignJoystickToPlayer(3);
-        //    }
-        //}
-
-        //if (Input.GetKeyDown(KeyCode.Joystick4Button7))
-        //{
-        //    if (GetJoystick(4).Assigned)
-        //    {
-        //        PlayerManager.GetInstance().AssignJoystickToPlayer(4);
-        //    }
-        //}
     }
 
 
@@ -88,6 +73,8 @@ public class JoystickManager : MonoBehaviour
         private int _joyNumber; //this SHOULD be either 1 or 2
 
         public KeyCode interactButton { get; private set; }
+        public KeyCode dropButton { get; private set; }
+        public KeyCode startButton { get; private set; }
 
         public string horizontalMoveAxis { get; private set; }
         public string verticalMoveAxis { get; private set; }
@@ -95,7 +82,6 @@ public class JoystickManager : MonoBehaviour
         public string horizontalLookAxis { get; private set; }
         public string verticalLookAxis { get; private set; }
 
-        public KeyCode startButton { get; private set; }
 
         public Joystick(int num)
         {
@@ -115,19 +101,17 @@ public class JoystickManager : MonoBehaviour
                 case 1:
                     startButton = KeyCode.Joystick1Button7;
                     interactButton = KeyCode.Joystick1Button0;
+                    dropButton = KeyCode.Joystick1Button1;
                     break;
                 case 2:
                     startButton = KeyCode.Joystick2Button7;
                     interactButton = KeyCode.Joystick2Button0;
+                    dropButton = KeyCode.Joystick2Button1;
                     break;
-                //case 3:
-                //    startButton = KeyCode.Joystick3Button7;
-                //    break;
-                //case 4:
-                //    startButton = KeyCode.Joystick4Button7;
-                //    break;
                 default:
                     startButton = KeyCode.None;
+                    interactButton = KeyCode.None;
+                    dropButton = KeyCode.None;
                     break;
             }
         }

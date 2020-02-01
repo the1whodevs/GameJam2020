@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Clock : MonoBehaviour
 {
+// Updated upstream
     private List<GameObject> cogs;
 
     [SerializeField] private GameObject smallHand;
@@ -13,8 +14,9 @@ public class Clock : MonoBehaviour
     [SerializeField] private GameObject numbers;
 
     private GameObject[] clockComponents;
-
-    private void Start()
+    
+    void Update()
+// Stashed changes
     {
         GameObject frontSide = new GameObject("Front Side");
         frontSide.transform.SetParent(transform);
@@ -33,7 +35,7 @@ public class Clock : MonoBehaviour
             Instantiate(cogs[i], cogSide.transform);
         }
 
-        cogSide.SetActive(false);
+        cogSide.transform.position = frontSide.transform.position + transform.right * 1.25f;
     }
 
     public GameObject[] GetClockComponents()

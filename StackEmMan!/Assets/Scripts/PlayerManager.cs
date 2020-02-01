@@ -8,13 +8,9 @@ public class PlayerManager : MonoBehaviour
 
     public GameObject Player1;
     public GameObject Player2;
-    public GameObject Player3;
-    public GameObject Player4;
 
     [HideInInspector] public LocalPlayer _player1;
     [HideInInspector] public LocalPlayer _player2;
-    [HideInInspector] public LocalPlayer _player3;
-    [HideInInspector] public LocalPlayer _player4;
 
     private void Awake()
     {
@@ -24,8 +20,6 @@ public class PlayerManager : MonoBehaviour
 
             _player1 = Player1.GetComponent<LocalPlayer>();
             _player2 = Player2.GetComponent<LocalPlayer>();
-            _player3 = Player3.GetComponent<LocalPlayer>();
-            _player4 = Player4.GetComponent<LocalPlayer>();
 
             DontDestroyOnLoad(this);
         }
@@ -41,22 +35,12 @@ public class PlayerManager : MonoBehaviour
         if (_player1.IsAvailable)
         {
             _player1.EnableAndAssignJoystick(joyNum);
-            //UIManager.GetInstance().EnablePlayer(1);
+            UIManager.instance.EnablePlayer(1);
         }
         else if (_player2.IsAvailable)
         {
             _player2.EnableAndAssignJoystick(joyNum);
-            //UIManager.GetInstance().EnablePlayer(2);
-        }
-        else if (_player3.IsAvailable)
-        {
-            _player3.EnableAndAssignJoystick(joyNum);
-            //UIManager.GetInstance().EnablePlayer(3);
-        }
-        else if (_player4.IsAvailable)
-        {
-            _player4.EnableAndAssignJoystick(joyNum);
-            //UIManager.GetInstance().EnablePlayer(4);
+            UIManager.instance.EnablePlayer(2);
         }
         else
         {

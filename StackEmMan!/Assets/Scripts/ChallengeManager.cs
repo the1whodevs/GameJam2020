@@ -32,11 +32,29 @@ public class ChallengeManager : MonoBehaviour
 
     public void FillWithClockComps()
     {
-        // For each clock...
+        for (int i = 0; i < ClocksNeeded.Count; i++)
+        {
+            // For each clock...
             // Make a list and ...
-            // For each component..
+            List<GameObject> clockList=new List<GameObject>();
+            GameObject[] comps = ClocksNeeded[i].GetComponent<Clock>().GetClockComponents();
+
+            for (int j = 0; j < comps.Length; j++)
+            {
+                // For each component..
                 // Add the component to the clock's list
-            // Then, add "numberOfExtraComponenets" in the clock's list, using ClockFactory.instance.GetRandomComponent()
+                clockList.Add(comps[j]);
+            }
+            for (int j = 0; j < numberOfExtraComponents; j++)
+            {
+                clockList.Add(ClockFactory.instance.GetRandomComponent());
+            }
+
+            ClockCompsNeeded.Add(clockList);
+        }
+        
+            
+            // Then, add "numberOfExtraComponents" in the clock's list, using ClockFactory.instance.GetRandomComponent()
             // Add the clock's list, to the "ClockCompsNeeded" list
         
     }

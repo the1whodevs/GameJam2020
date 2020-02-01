@@ -63,7 +63,7 @@ public class JoystickManager : MonoBehaviour
     /// <returns></returns>
     public Joystick GetJoystick(int joyNum)
     {
-        return _joysticks[joyNum - 1];
+        return _joysticks[joyNum-1];
     }
 
     public class Joystick

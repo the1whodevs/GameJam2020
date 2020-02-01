@@ -6,17 +6,17 @@ using Unity;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed = 20.0f;
-    [SerializeField] private Rigidbody _rb;
+    
+    private Rigidbody _rb;
 
 
     private JoystickManager.Joystick _joystick;
 
     public void OnEnable()
     {
-        if (GameManager.GetInstance())
-        {
-            _joystick = GetComponent<LocalPlayer>().GetPlayerJoystick();
-        }
+      
+        _joystick = GetComponent<LocalPlayer>().GetPlayerJoystick();
+        
     }
 
     void Start()

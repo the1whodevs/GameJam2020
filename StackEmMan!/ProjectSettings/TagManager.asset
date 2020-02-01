@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ConveyorBelt
   - Boundary
+  - Checkpoint
   layers:
   - Default
   - TransparentFX

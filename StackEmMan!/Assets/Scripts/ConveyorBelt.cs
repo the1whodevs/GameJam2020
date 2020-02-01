@@ -9,31 +9,39 @@ public class ConveyorBelt : MonoBehaviour
 
     public int ID;
 
-    public float StartingSpeed;
-    public static Vector3 Velocity;
-    public string BoundaryTag;
-    public Transform[] SpawnPoints;
+    [SerializeField] readonly Transform[] spawnPoints = new Transform[5];
+    [SerializeField] string boundaryTag;
+    [SerializeField] bool isRunning = false;  //MOVING ITEMS MUST BE ENABLED BY THE SPAWNER
+    [SerializeField] private float startingSpeed = 0.6f;
+    [SerializeField] private float length = 5f;
 
-    [HideInInspector]
-    public bool IsRunning;  //MOVING ITEMS MUST BE ENABLED BY THE SPAWNER
+    // private bool actionInProgress;
 
-    [SerializeField] private float currentSpeed;
-
-    private bool actionInProgress;
-
+    private float currentSpeed;
+    private Vector3 velocity;
     private Vector3 startingPosition;
+
+    public Transform[] SpawnPoints => spawnPoints;
+
+    public bool IsRunning
+    {
+        get => isRunning;
+        set => isRunning = value;
+    }
 
     public float CurrentSpeed => currentSpeed;
 
+    public float Length => length;
+
     void Awake()
     {
-        //TODO : Dont Destroy OnLoad
+        GameObject.DontDestroyOnLoad(gameObject);
 
         //GUIManager.GameReset += GuiManager_GameReset;
 
-
-        Velocity = StartingSpeed * Vector3.left;
-        currentSpeed = StartingSpeed;
+        currentSpeed = startingSpeed;
+        velocity = currentSpeed * Vector3.left;
+        
 
         gameObject.SetActive(false);
         
@@ -51,9 +59,9 @@ public class ConveyorBelt : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (IsRunning)
+        if (isRunning)
         {
-            transform.localPosition += Velocity * Time.deltaTime;
+            transform.localPosition += velocity * Time.deltaTime;
         }
     }
 
@@ -78,6 +86,8 @@ public class ConveyorBelt : MonoBehaviour
             ItemDeactivated(this, eventArgs);
         }
     }
+
+    #region Comparison - may not be needed in current implementation
 
     public bool Equals(ConveyorBelt other)
     {
@@ -140,4 +150,6 @@ public class ConveyorBelt : MonoBehaviour
 
         return !(conveyorBelt1.Equals(conveyorBelt2));
     }
+
+    #endregion
 }

@@ -606,7 +606,7 @@ GameObject:
   - component: {fileID: 296216215}
   m_Layer: 10
   m_Name: ConveyorBelt Out (1)
-  m_TagString: ConveyorBelt
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -735,7 +735,7 @@ GameObject:
   - component: {fileID: 407566845}
   m_Layer: 10
   m_Name: ConveyorBelt Out (4)
-  m_TagString: ConveyorBelt
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1196,7 +1196,7 @@ GameObject:
   - component: {fileID: 539634551}
   m_Layer: 10
   m_Name: ConveyorBelt Out Starting
-  m_TagString: StartingBelt
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1260,7 +1260,7 @@ GameObject:
   - component: {fileID: 546691793}
   m_Layer: 10
   m_Name: ConveyorBelt Out (2)
-  m_TagString: ConveyorBelt
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3198,7 +3198,7 @@ GameObject:
   - component: {fileID: 1193908707}
   m_Layer: 10
   m_Name: ConveyorBelt Out (3)
-  m_TagString: ConveyorBelt
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5021,7 +5021,7 @@ GameObject:
   - component: {fileID: 1958323892}
   m_Layer: 10
   m_Name: ConveyorBelt Out
-  m_TagString: ConveyorBelt
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

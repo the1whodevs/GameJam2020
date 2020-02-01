@@ -50,10 +50,13 @@ public class SpawnManager : MonoBehaviour
 
     private IEnumerator ConveyorBeltSpawn()
     {
+        Debug.Log("ENUM (BEFORE IF): " + ConveyorBeltQueue.Count);
+
         if (ConveyorBeltQueue.Count > 0)
         {
-            for (int i = 0; i < ConveyorBeltQueue.Count; i++)
+            while (ConveyorBeltQueue.Count > 0)
             {
+                Debug.Log("ENUM: " + ConveyorBeltQueue.Count);
                 GameObject o = ConveyorBeltQueue.Dequeue();
                 o.SetActive(true);
                 o.GetComponent<ConveyorBelt>().IsRunning = true;
@@ -72,6 +75,7 @@ public class SpawnManager : MonoBehaviour
         conveyorBelt.IsRunning = false;
         conveyorBelt.gameObject.SetActive(false);
         ConveyorBeltQueue.Enqueue(conveyorBelt.gameObject);
+        Debug.Log(ConveyorBeltQueue.Count);
     }
 
     public void Spawn()

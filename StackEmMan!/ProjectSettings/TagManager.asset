@@ -8,6 +8,8 @@ TagManager:
   - Boundary
   - Checkpoint
   - StartingBelt
+  - ConveyorBeltOut
+  - StartingBeltOut
   layers:
   - Default
   - TransparentFX

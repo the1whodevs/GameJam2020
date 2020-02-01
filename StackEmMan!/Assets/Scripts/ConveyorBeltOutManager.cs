@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class SpawnManager : MonoBehaviour
+public class ConveyorBeltOutManager : MonoBehaviour
 {
     private ChallengeManager challengeManager;
 
@@ -21,12 +21,10 @@ public class SpawnManager : MonoBehaviour
 
     public void Start()
     {
-        challengeManager = GameObject.Find("ChallengeManager").GetComponent<ChallengeManager>();
+        conveyorObjects = GameObject.FindGameObjectsWithTag("ConveyorBeltOut");
+        startingConveyorObjects = GameObject.FindGameObjectsWithTag("StartingBeltOut");
 
-        conveyorObjects = GameObject.FindGameObjectsWithTag("ConveyorBelt");
-        startingConveyorObjects = GameObject.FindGameObjectsWithTag("StartingBelt");
-
-        for (int i = 0; i < conveyorObjects.Length ; i++)
+        for (int i = 0; i < conveyorObjects.Length; i++)
         {
             ConveyorBeltQueue.Enqueue(conveyorObjects[i]);
             conveyorObjects[i].GetComponent<ConveyorBelt>().ItemDeactivated += ConveyorBelt_ItemDeactivated;
@@ -35,19 +33,15 @@ public class SpawnManager : MonoBehaviour
         }
 
         ConveyorBelt cb = conveyorObjects[0].GetComponent<ConveyorBelt>();
-        spawnInterval = cb.Length / cb.CurrentSpeed;
-        Debug.Log(spawnInterval);
+        spawnInterval = GameObject.Find("SpawnManager").GetComponent<SpawnManager>().SpawnInterval;
     }
 
-    private void OnGUI()
+    public void StartConveyorOut(float sInterval)
     {
-        if (GUILayout.Button("Press me plis"))
-        {
-            Spawn();
-            StartCoroutine(ConveyorBeltSpawn());
+        spawnInterval = sInterval;
 
-            GameObject.Find("ConveyorBelts Out").GetComponent<ConveyorBeltOutManager>().StartConveyorOut(spawnInterval);
-        }
+        StartCoroutine(ConveyorBeltSpawn());
+        StartStartingBeltOut();
     }
 
     private IEnumerator ConveyorBeltSpawn()
@@ -62,13 +56,9 @@ public class SpawnManager : MonoBehaviour
                 yield return new WaitForSeconds(spawnInterval);
             }
         }
-        else
-        {
-            Debug.LogError("ConveyorBeltQueue is Empty");
-        }
     }
 
-    protected void ConveyorBelt_ItemDeactivated(object sender,EventArgs eventArgs)
+    protected void ConveyorBelt_ItemDeactivated(object sender, EventArgs eventArgs)
     {
         ConveyorBelt conveyorBelt = (ConveyorBelt)sender;
         conveyorBelt.IsRunning = false;
@@ -76,37 +66,8 @@ public class SpawnManager : MonoBehaviour
         ConveyorBeltQueue.Enqueue(conveyorBelt.gameObject);
     }
 
-    public void Spawn()
+    public void StartStartingBeltOut()
     {
-        List<Transform> spawnPoints = new List<Transform>();
-
-        foreach (GameObject g in conveyorObjects)
-        {
-            for (int i = 0; i < g.transform.childCount; i++)
-            {
-                spawnPoints.Add(g.transform.GetChild(i));
-                if (spawnPoints[i].childCount > 0)
-                {
-                    Destroy(spawnPoints[i].GetChild(0));
-                }
-            }
-        }
-
-        List<GameObject> nextClock = new List<GameObject>();
-        nextClock = challengeManager.GetNextClock();
-
-        for (int i = 0; i < nextClock.Count; i++)
-        {
-            int rand = Random.Range(0, spawnPoints.Count);
-
-            Instantiate(nextClock[i], Vector3.zero, Quaternion.identity, spawnPoints[rand]);
-
-            spawnPoints.RemoveAt(rand);
-        
-        }
-
-        
-
         if (!hasStarted)
         {
             hasStarted = true;

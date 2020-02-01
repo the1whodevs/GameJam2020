@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7885054741677571465}
   - component: {fileID: 1166864192800244744}
+  - component: {fileID: -7089412404038603903}
   m_Layer: 0
   m_Name: Blue Bell
   m_TagString: Untagged
@@ -81,3 +82,16 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &-7089412404038603903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7885054741677571463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15d2533367641f24b97fb7a867dcffe9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 4

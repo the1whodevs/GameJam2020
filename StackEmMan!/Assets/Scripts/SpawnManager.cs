@@ -6,6 +6,8 @@ using Random = UnityEngine.Random;
 
 public class SpawnManager : MonoBehaviour
 {
+    [SerializeField] private Transform _p1Spawn, _p2Spawn;
+
     private ChallengeManager challengeManager;
 
     private int NumberOfClockComps;
@@ -43,10 +45,17 @@ public class SpawnManager : MonoBehaviour
     {
         if (GUILayout.Button("Press me plis"))
         {
+            // Spawns the first clock
             Spawn();
+
+            // Starts the ConveyorBeltIn & ConveyorBeltInStarting
             StartCoroutine(ConveyorBeltSpawn());
 
+            // Start the ConveyorBeltOut & ConveyorBeltOutStarting
             GameObject.Find("ConveyorBelts Out").GetComponent<ConveyorBeltOutManager>().StartConveyorOut(spawnInterval);
+
+            // Spawns the two players
+            PlayerManager.GetInstance().EnablePlayers(_p1Spawn, _p2Spawn);
         }
     }
 

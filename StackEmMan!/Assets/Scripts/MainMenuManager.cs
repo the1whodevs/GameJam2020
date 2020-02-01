@@ -23,7 +23,7 @@ public class MainMenuManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Joystick1Button7) || Input.GetKeyDown(KeyCode.Joystick2Button7))
             {
-                SceneManager.LoadScene("TestScene");
+                SceneManager.LoadScene("Level 1");
             } 
         }
 

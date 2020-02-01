@@ -6,24 +6,25 @@ public class ChallengeManager : MonoBehaviour
 {
     int currentIndex = 0;
 
-    int numOfComponentsPerClock;
-    int numOfClocks;
+    [SerializeField] private int numOfCogs;
+    [SerializeField] private int numOfClocks;
 
     [SerializeField] private int numberOfExtraComponents;
 
-    List<GameObject> ClocksNeeded;
-    List<List<GameObject>> ClockCompsNeeded;
+    List<GameObject> ClocksNeeded = new List<GameObject>();
+    List<List<GameObject>> ClockCompsNeeded = new List<List<GameObject>>();
 
     void Start()
     {
         MakeClocksNeeded();
+        FillWithClockComps();
     }
 
     private void MakeClocksNeeded()
     {
         for (int i = 0; i < numOfClocks; i++)
         {
-            ClocksNeeded.Add(ClockFactory.instance.GetNewClock(numOfComponentsPerClock));
+            ClocksNeeded.Add(ClockFactory.instance.GetNewClock(numOfCogs));
         }
     }
 
@@ -49,7 +50,8 @@ public class ChallengeManager : MonoBehaviour
     /// <returns></returns>
     public List<GameObject> GetNextClock()
     {
-        List<GameObject> nextClock = ClockCompsNeeded[currentIndex];
+        List<GameObject> nextClock = new List<GameObject>();
+        nextClock = ClockCompsNeeded[currentIndex];
         currentIndex++;
         return nextClock;
     }

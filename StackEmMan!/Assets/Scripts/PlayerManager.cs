@@ -32,6 +32,7 @@ public class PlayerManager : MonoBehaviour
 
     public void AssignJoystickToPlayer(int joyNum)
     {
+        Debug.Log("AssignJoystickToPlayer");
         if (_player1.IsAvailable)
         {
             _player1.EnableAndAssignJoystick(joyNum);

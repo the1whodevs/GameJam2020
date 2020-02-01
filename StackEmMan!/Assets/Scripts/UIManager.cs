@@ -12,8 +12,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _p1PressStart;
     [SerializeField] private GameObject _p2PressStart;
 
-    //[HideInInspector] public LocalPlayer _player1;
-    //[HideInInspector] public LocalPlayer _player2;
+
 
     void Awake()
     {

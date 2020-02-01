@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -13,8 +14,6 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private Transform SpawnPoint;
     private Queue<GameObject> ConveyorBeltQueue;
     private GameObject[] conveyorObjects;
-    
-
 
     public void Awake()
     {
@@ -26,6 +25,7 @@ public class SpawnManager : MonoBehaviour
             conveyorObjects[i].SetActive(false);
             conveyorBelt.IsRunning = false;
         }
+ 
     }
 
     private IEnumerator ConveyorBeltSpawn()
@@ -57,7 +57,31 @@ public class SpawnManager : MonoBehaviour
 
     public void Spawn()
     {
+        List<Transform> spawnPoints = new List<Transform>();
 
+        foreach (GameObject g in conveyorObjects)
+        {
+            for (int i = 0; i < g.transform.childCount; i++)
+            {
+                spawnPoints.Add(g.transform.GetChild(i));
+                if (spawnPoints[i].childCount > 0)
+                {
+                    Destroy(spawnPoints[i].GetChild(0));
+                }
+            }
+        }
+
+        List<GameObject> nextClock = challengeManager.GetNextClock();
+
+        for (int i = 0; i < nextClock.Count; i++)
+        {
+            int rand = Random.Range(0, spawnPoints.Count);
+
+            Instantiate(nextClock[i], Vector3.zero, Quaternion.identity, spawnPoints[rand]);
+
+            spawnPoints.RemoveAt(rand);
+        
+        }
     }
 
     public void Despawn()

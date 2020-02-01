@@ -2,17 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ComponentType { smallHand, bigHand, numbers, frame, bell, smallCog, mediumCog, bigCog}
+public enum Color { red, yellow, blue}
+
 public class ClockComponent : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public ComponentType Type;
+    public Color Color;
 }

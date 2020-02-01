@@ -1,66 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    private static GameManager _instance;
+    public static GameManager instance;
 
+    [SerializeField] private Transform _p1Spawn, _p2Spawn;
 
-    private void Awake()
+    void Awake()
     {
-        if (!_instance)
+        if (!instance)
         {
-            _instance = this;
-        }
-    }
-
-    private void Update()
-    {
-        if (JoystickManager.GetInstance().GetJoystick(1).Assigned && JoystickManager.GetInstance().GetJoystick(2).Assigned)
-        {
-            if (Input.GetKeyDown(KeyCode.Joystick1Button7) || Input.GetKeyDown(KeyCode.Joystick2Button7))
-            {
-                SceneManager.LoadScene("Level 1");
-            } 
+            instance = this;
         }
 
     }
-
-    public static GameManager GetInstance() { return _instance; }
-
-    public void SpawnPlayers(params GameObject[] playersToSpawn)
+    void Start()
     {
-        foreach (GameObject go in playersToSpawn)
-        {
-            SpawnRandom(go, transform);
-        }
+        PlayerManager.GetInstance().EnablePlayers(_p1Spawn, _p2Spawn);
     }
 
-    void SpawnRandom(GameObject toSpawn)
+    void Update()
     {
-
-        Vector3 randomPos = new Vector3(
-            Random.Range(-5, 5), //x
-            0.0f, //y
-            Random.Range(-5, 5)); //z
-
+        
     }
-
-    void SpawnRandom(GameObject toSpawn, Transform parentToSet)
-    {
-
-        Vector3 randomPos = new Vector3(
-            Random.Range(-5, 5), //x
-            0.0f, //y
-            Random.Range(-5, 5)); //z
-
-        toSpawn.transform.SetParent(parentToSet);
-        toSpawn.transform.position = randomPos;
-        toSpawn.GetComponent<PlayerController>().enabled = true;
-       
-    }
-
 }

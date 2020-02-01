@@ -24,7 +24,7 @@ public class SantaController : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.GetInstance()) //we're checking this to make sure we're intentionally not connected!
+        if (MainMenuManager.GetInstance()) //we're checking this to make sure we're intentionally not connected!
         {
             CheckInput(_joystick);
             Rotate(_joystick);

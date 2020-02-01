@@ -49,4 +49,13 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public void EnablePlayers(Transform p1Spawn, Transform p2Spawn)
+    {
+        Player1.SetActive(true);
+        Player2.SetActive(true);
+
+        Player1.transform.position = p1Spawn.position;
+        Player2.transform.position = p2Spawn.position;
+    }
+
 }

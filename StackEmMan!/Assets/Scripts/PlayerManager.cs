@@ -12,6 +12,7 @@ public class PlayerManager : MonoBehaviour
     [HideInInspector] public LocalPlayer _player1;
     [HideInInspector] public LocalPlayer _player2;
 
+
     private void Awake()
     {
         if (!_instance)
@@ -32,7 +33,6 @@ public class PlayerManager : MonoBehaviour
 
     public void AssignJoystickToPlayer(int joyNum)
     {
-        Debug.Log("AssignJoystickToPlayer");
         if (_player1.IsAvailable)
         {
             _player1.EnableAndAssignJoystick(joyNum);
@@ -48,4 +48,5 @@ public class PlayerManager : MonoBehaviour
             Debug.LogError("No players available for joystick number " + joyNum);
         }
     }
+
 }

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
 
-    [SerializeField] private GameObject _playerPrefab;
 
     private void Awake()
     {
@@ -15,6 +15,18 @@ public class GameManager : MonoBehaviour
         {
             _instance = this;
         }
+    }
+
+    private void Update()
+    {
+        if (JoystickManager.GetInstance().GetJoystick(1).Assigned && JoystickManager.GetInstance().GetJoystick(2).Assigned)
+        {
+            if (Input.GetKeyDown(KeyCode.Joystick1Button7) || Input.GetKeyDown(KeyCode.Joystick2Button7))
+            {
+                SceneManager.LoadScene("Level 1");
+            } 
+        }
+
     }
 
     public static GameManager GetInstance() { return _instance; }

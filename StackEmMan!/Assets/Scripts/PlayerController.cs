@@ -41,7 +41,8 @@ public class PlayerController : MonoBehaviour
 
         Vector3 translation = new Vector3(horizontal, 0.0f, vertical) * Time.deltaTime * _moveSpeed;
 
-        _rb.AddForce(translation, ForceMode.Impulse);
+        //_rb.AddForce(translation, ForceMode.);
+        _rb.position += translation;
     }
 
     void Interact()

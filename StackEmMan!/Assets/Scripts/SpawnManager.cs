@@ -9,8 +9,9 @@ public class SpawnManager : MonoBehaviour
     private ChallengeManager challengeManager;
 
     private int NumberOfClockComps;
-    
-    [SerializeField] private float spawnInterval { get; set; }
+
+    private float spawnInterval;
+    public float SpawnInterval => spawnInterval;
 
     private Queue<GameObject> ConveyorBeltQueue = new Queue<GameObject>();
 
@@ -18,21 +19,24 @@ public class SpawnManager : MonoBehaviour
 
     private bool hasStarted = false;
 
-    public void Awake()
+    public void Start()
     {
         challengeManager = GameObject.Find("ChallengeManager").GetComponent<ChallengeManager>();
 
         conveyorObjects = GameObject.FindGameObjectsWithTag("ConveyorBelt");
         startingConveyorObjects = GameObject.FindGameObjectsWithTag("StartingBelt");
 
-        for (int i = 0; i <conveyorObjects.Length ; i++)
+        for (int i = 0; i < conveyorObjects.Length ; i++)
         {
             ConveyorBeltQueue.Enqueue(conveyorObjects[i]);
             conveyorObjects[i].GetComponent<ConveyorBelt>().ItemDeactivated += ConveyorBelt_ItemDeactivated;
             conveyorObjects[i].SetActive(false);
             conveyorObjects[i].GetComponent<ConveyorBelt>().IsRunning = false;
         }
- 
+
+        ConveyorBelt cb = conveyorObjects[0].GetComponent<ConveyorBelt>();
+        spawnInterval = cb.Length / cb.CurrentSpeed;
+        Debug.Log(spawnInterval);
     }
 
     private void OnGUI()
@@ -40,6 +44,7 @@ public class SpawnManager : MonoBehaviour
         if (GUILayout.Button("Press me plis"))
         {
             Spawn();
+            StartCoroutine(ConveyorBeltSpawn());
         }
     }
 
@@ -98,7 +103,7 @@ public class SpawnManager : MonoBehaviour
         
         }
 
-        StartCoroutine(ConveyorBeltSpawn());
+        
 
         if (!hasStarted)
         {

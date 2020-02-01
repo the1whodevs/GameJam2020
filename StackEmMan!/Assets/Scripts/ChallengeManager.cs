@@ -27,7 +27,7 @@ public class ChallengeManager : MonoBehaviour
         }
     }
 
-    public bool CheckChallengeComplete()
+    public bool CheckChallengeComplete(GameObject itemDelivered)
     {
         return true;
     }

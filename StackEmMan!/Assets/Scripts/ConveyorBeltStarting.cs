@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class ConveyorBeltStarting : ConveyorBelt
 {
-    protected override void Awake()
-    {
-        base.Awake();
-        gameObject.SetActive(true);
-        IsRunning = true;
-    }
+    //protected override void Awake()
+    //{
+    //    base.Awake();
+    //    gameObject.SetActive(true);
+    //    IsRunning = true;
+    //}
 
     public override void ResetItem()
     {

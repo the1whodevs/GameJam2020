@@ -14,13 +14,16 @@ public class SpawnManager : MonoBehaviour
 
     private Queue<GameObject> ConveyorBeltQueue = new Queue<GameObject>();
 
-    private GameObject[] conveyorObjects;
+    private GameObject[] conveyorObjects, startingConveyorObjects;
+
+    private bool hasStarted = false;
 
     public void Awake()
     {
         challengeManager = GameObject.Find("ChallengeManager").GetComponent<ChallengeManager>();
 
         conveyorObjects = GameObject.FindGameObjectsWithTag("ConveyorBelt");
+        startingConveyorObjects = GameObject.FindGameObjectsWithTag("StartingBelt");
 
         for (int i = 0; i <conveyorObjects.Length ; i++)
         {
@@ -93,6 +96,20 @@ public class SpawnManager : MonoBehaviour
 
             spawnPoints.RemoveAt(rand);
         
+        }
+
+        StartCoroutine(ConveyorBeltSpawn());
+
+        if (!hasStarted)
+        {
+            hasStarted = true;
+
+            for (int i = 0; i < startingConveyorObjects.Length; i++)
+            {
+                ConveyorBeltStarting cbs = startingConveyorObjects[i].GetComponent<ConveyorBeltStarting>();
+                cbs.IsRunning = true;
+                startingConveyorObjects[i].SetActive(true);
+            }
         }
     }
 

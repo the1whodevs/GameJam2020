@@ -69,4 +69,54 @@ public class Clock : MonoBehaviour
         clockComponents[cogs.Count + 3] = frame;
         clockComponents[cogs.Count + 4] = numbers;
     }
+    public static bool CompareClocks(Clock clock1, Clock clock2)
+    {
+        bool compare,smallHand, bigHand, numbers, frame, bell,cog = false;
+        smallHand =
+            (clock1.smallHand.GetComponent<ClockComponent>().Type == clock2.smallHand.GetComponent<ClockComponent>().Type) 
+            && (clock1.smallHand.GetComponent<ClockComponent>().Color == clock2.smallHand.GetComponent<ClockComponent>().Color);
+        
+        bigHand=
+            (clock1.bigHand.GetComponent<ClockComponent>().Type == clock2.bigHand.GetComponent<ClockComponent>().Type)
+            && (clock1.bigHand.GetComponent<ClockComponent>().Color == clock2.bigHand.GetComponent<ClockComponent>().Color);
+
+        numbers =
+            (clock1.numbers.GetComponent<ClockComponent>().Type == clock2.numbers.GetComponent<ClockComponent>().Type)
+            && (clock1.numbers.GetComponent<ClockComponent>().Color == clock2.numbers.GetComponent<ClockComponent>().Color);
+
+        frame=
+            (clock1.frame.GetComponent<ClockComponent>().Type == clock2.frame.GetComponent<ClockComponent>().Type)
+            && (clock1.frame.GetComponent<ClockComponent>().Color == clock2.frame.GetComponent<ClockComponent>().Color);
+
+        bell =
+            (clock1.bell.GetComponent<ClockComponent>().Type == clock2.bell.GetComponent<ClockComponent>().Type)
+            && (clock1.bell.GetComponent<ClockComponent>().Color == clock2.bell.GetComponent<ClockComponent>().Color);
+
+        if (clock1.cogs.Count==clock2.cogs.Count)
+        {
+            bool[] cogsOK = new bool[clock1.cogs.Count];
+
+            for (int i = 0; i < clock1.cogs.Count; i++)
+            {
+                cogsOK[i] = clock1.cogs[i].GetComponent<ClockComponent>().Type == clock2.cogs[i].GetComponent<ClockComponent>().Type;
+
+                if (!cogsOK[i])
+                {
+                    cog = false;
+                    break;
+                }
+                else
+                {
+                    cog = true;
+                }
+            } 
+        }
+        else
+        {
+            cog = false;
+        }
+
+        compare = smallHand && bigHand && numbers && frame && bell && cog;
+        return compare;
+    }
 }

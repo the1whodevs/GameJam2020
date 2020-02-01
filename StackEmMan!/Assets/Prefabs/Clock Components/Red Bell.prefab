@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8606726360453799721}
   - component: {fileID: 733492219438098088}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Red Bell
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4600022366911864220}
   - component: {fileID: 4600022366911864221}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -91,7 +91,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4600022368537057841}
   - component: {fileID: 4600022368537057846}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -171,7 +171,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4600022368583287213}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Small Blue Cog
   m_TagString: Untagged
   m_Icon: {fileID: 0}

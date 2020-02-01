@@ -7,19 +7,27 @@ public class ConveyorBelt : MonoBehaviour
 {
     public event EventHandler ItemDeactivated;
 
-    public int ID;
+    [SerializeField]
+    enum MoveDirection
+    {
+        Up,
+        Down
+    }
+
+    public int ID; //TODO: consider if it's needed
 
     [SerializeField] readonly Transform[] spawnPoints = new Transform[5];
-    [SerializeField] string boundaryTag;
-    [SerializeField] bool isRunning = false;  //MOVING ITEMS MUST BE ENABLED BY THE SPAWNER
+    [SerializeField] string boundaryTag = "Boundary";
     [SerializeField] private float startingSpeed = 0.6f;
     [SerializeField] private float length = 5f;
+    [SerializeField] private MoveDirection moveDirection = MoveDirection.Down;
 
     // private bool actionInProgress;
 
+    bool isRunning = false;  //MOVING ITEMS MUST BE ENABLED BY THE SPAWNER
     private float currentSpeed;
     private Vector3 velocity;
-    private Vector3 startingPosition;
+    protected Vector3 StartingPosition;
 
     public Transform[] SpawnPoints => spawnPoints;
 
@@ -29,21 +37,43 @@ public class ConveyorBelt : MonoBehaviour
         set => isRunning = value;
     }
 
+    public string BoundaryTag => boundaryTag;
+
     public float CurrentSpeed => currentSpeed;
 
     public float Length => length;
 
-    void Awake()
+    protected virtual void Awake()
     {
         GameObject.DontDestroyOnLoad(gameObject);
 
         //GUIManager.GameReset += GuiManager_GameReset;
 
         currentSpeed = startingSpeed;
-        velocity = currentSpeed * Vector3.left;
-        
 
-        gameObject.SetActive(false);
+        //Set Velocity according to MOve Direction (Down: Items going IN, Up: Items going Out)
+        switch (moveDirection)
+        {
+            case MoveDirection.Up:
+
+                velocity = currentSpeed * Vector3.forward;
+
+            break;
+
+            case MoveDirection.Down:
+
+                velocity = currentSpeed * Vector3.back;
+
+            break;
+
+            default:
+                Debug.LogError("Invalid MoveDirection"); 
+            break;
+        }
+
+
+        // isRunning = true;
+        // gameObject.SetActive(false);
         
     }
 
@@ -52,7 +82,7 @@ public class ConveyorBelt : MonoBehaviour
         //CurrentTransform = transform;
 
         //set startingPosition so that the GameObject's position can be reset to that, after it gets Deactivated
-        startingPosition = transform.position;
+        StartingPosition = transform.position;
 
     }
 
@@ -65,13 +95,24 @@ public class ConveyorBelt : MonoBehaviour
         }
     }
 
-    protected virtual void ResetItem()
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == boundaryTag)
+        {
+            //FOR TESTING ONLY
+            Debug.Log(name + " hit " + other.name);
+
+            ResetItem();
+        }
+    }
+
+    public virtual void ResetItem()
     {
         //IsRunning = false;
 
 
         //reset position
-        transform.position = startingPosition;
+        transform.position = StartingPosition;
 
         //gameObject.SetActive(false);
 

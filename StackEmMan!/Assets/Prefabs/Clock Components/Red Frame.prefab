@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5687127341878105702}
   - component: {fileID: 3724586157376696295}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Red Frame
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7667246248620384726}
   - component: {fileID: 7667246248620384727}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7667246250165992935}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Small Red Cog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,7 +123,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7667246250245514875}
   - component: {fileID: 7667246250245514876}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

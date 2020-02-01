@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 93364866769511031}
   - component: {fileID: 93364866769511030}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Blue Small Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}

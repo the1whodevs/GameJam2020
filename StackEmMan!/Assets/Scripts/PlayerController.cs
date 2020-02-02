@@ -7,8 +7,15 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Transform _hands;
     [SerializeField] private float _moveSpeed = 20.0f;
-    
+    [SerializeField] private Transform _hands;
+    [SerializeField] private GameObject _pickUp;
+
+    //[SerializeField] private GameObject _tool;
+    //[SerializeField] private GameObject _clock;
+
     private Rigidbody _rb;
+    private ClockComponent _clock;
+    private Tool _tool;
 
     private bool holdingItem = false;
     private bool inAssemblyTableTrigger = false;
@@ -24,7 +31,9 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+
         _rb = GetComponent<Rigidbody>();
+        
     }
 
     void FixedUpdate()
@@ -45,7 +54,7 @@ public class PlayerController : MonoBehaviour
         _rb.velocity = translation.normalized * _moveSpeed;
     }
 
-    void Interact()
+    public void Interact()
     {
         if (Input.GetKey(_joystick.interactButton))
         {

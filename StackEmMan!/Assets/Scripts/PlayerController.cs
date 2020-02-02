@@ -5,10 +5,13 @@ using Unity;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private Transform _hands;
     [SerializeField] private float _moveSpeed = 20.0f;
     
     private Rigidbody _rb;
 
+    private bool holdingItem = false;
+    private bool inAssemblyTableTrigger = false;
 
     private JoystickManager.Joystick _joystick;
 
@@ -26,14 +29,12 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-
         Move();
-        
+        Interact();
     }
 
     void Move()
     {
-
         transform.forward = new Vector3(Input.GetAxis(_joystick.horizontalMoveAxis), 0.0f, Input.GetAxis(_joystick.verticalMoveAxis));
 
         float horizontal = Input.GetAxis(_joystick.horizontalMoveAxis);
@@ -41,38 +42,67 @@ public class PlayerController : MonoBehaviour
 
         Vector3 translation = new Vector3(horizontal, 0.0f, vertical) * Time.deltaTime * _moveSpeed;
 
-        //_rb.position += translation;
-        //_rb.MovePosition(_rb.position + translation);
-        //_rb.AddForce(translation, ForceMode.Acceleration);
         _rb.velocity = translation.normalized * _moveSpeed;
     }
 
     void Interact()
     {
-        //bool isHolding;
-        //_joystick.interactButton
         if (Input.GetKey(_joystick.interactButton))
         {
+            if (inAssemblyTableTrigger)
+            {
+                if (holdingItem)
+                {
+                    // Try to place the holded item on the assembly table
+                    bool placedItem = AssemblyTable.instance.AddComponentToTable(_hands.GetChild(0).gameObject);
 
-            //isHolding = true;
+                    if (placedItem)
+                    {
+                        holdingItem = false;
+                    }
+                }
+                else
+                {
+                    // try to pick something up from the assembly table
+                    if (AssemblyTable.instance.HasItemsOnTable())
+                    {
+                        // (use dist from each attachment point to select which object to pickup)
+                        AssemblyTable.instance.GiveObjectFromTable(_hands);
+                        holdingItem = true;
+                    }
+                    else
+                    {
+                        Debug.Log("No items on table!");
+                    }                    
+                }
+            }
+            else
+            {
+                if (!holdingItem)
+                {
+                    // try to pick something up
+                }
+                else
+                {
+                    // try to place something on a table/conveyor belt (NOT assembly table)
+                }
+            }
         }
     }
 
-    void CheckInput()
+    void OnTriggerEnter(Collider other)
     {
-       // Running = !(Mathf.Approximately(Input.GetAxis("Horizontal"), 0) && Mathf.Approximately(Input.GetAxis("Vertical"), 0.0f));
+        if (other.CompareTag("AssemblyTable"))
+        {
+            inAssemblyTableTrigger = true;
+        }
     }
 
-    void CheckInput(JoystickManager.Joystick localPlayerJoystick)
+    private void OnTriggerExit(Collider other)
     {
-        //Running = !(Mathf.Approximately(Input.GetAxis(localPlayerJoystick.horizontalMoveAxis), 0.0f) && Mathf.Approximately(Input.GetAxis(localPlayerJoystick.verticalMoveAxis), 0.0f));
-    }
-    void OnTriggerStay(Collider other)
-    {
-        if (other)
+        if (other.CompareTag("AssemblyTable"))
         {
-            Interact();
-            Debug.Log("Player can interact");
+            inAssemblyTableTrigger = false;
         }
     }
 

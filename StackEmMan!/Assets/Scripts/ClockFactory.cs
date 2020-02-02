@@ -132,4 +132,17 @@ public class ClockFactory : MonoBehaviour
     {
         return numbers[Random.Range(0, numbers.Count)];
     }
+    public Clock AssembleClock(GameObject smallHand, GameObject bigHand, GameObject frame, GameObject bell, GameObject numbers, params GameObject[] cogs)
+    {
+        List<GameObject> cogsList = new List<GameObject>();
+
+        for (int i = 0; i < cogs.Length; i++)
+        {
+            cogsList.Add(cogs[i]);
+        }
+
+        Clock clock = new Clock();
+        clock.SetClockComponents(cogsList, smallHand, bigHand, bell, frame, numbers);
+        return clock;
+    }
 }

@@ -99,6 +99,7 @@ public class SpawnManager : MonoBehaviour
             for (int i = 0; i < g.transform.childCount; i++)
             {
                 spawnPoints.Add(g.transform.GetChild(i));
+
                 if (spawnPoints[i].childCount > 0)
                 {
                     Destroy(spawnPoints[i].GetChild(0));
@@ -116,10 +117,7 @@ public class SpawnManager : MonoBehaviour
             Instantiate(nextClock[i], Vector3.zero, Quaternion.identity, spawnPoints[rand]);
 
             spawnPoints.RemoveAt(rand);
-        
         }
-
-        
 
         if (!hasStarted)
         {

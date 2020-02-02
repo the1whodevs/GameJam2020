@@ -98,11 +98,14 @@ public class SpawnManager : MonoBehaviour
         {
             for (int i = 0; i < g.transform.childCount; i++)
             {
-                spawnPoints.Add(g.transform.GetChild(i));
-
-                if (spawnPoints[i].childCount > 0)
+                if (g.transform.GetChild(i).CompareTag("SpawnPoint"))
                 {
-                    Destroy(spawnPoints[i].GetChild(0));
+                    spawnPoints.Add(g.transform.GetChild(i));
+
+                    if (spawnPoints[i].childCount > 0)
+                    {
+                        Destroy(spawnPoints[i].GetChild(0));
+                    }
                 }
             }
         }

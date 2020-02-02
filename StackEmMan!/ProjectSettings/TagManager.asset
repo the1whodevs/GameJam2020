@@ -13,6 +13,7 @@ TagManager:
   - AssemblyTable
   - ChargingBase
   - FxTemporaire
+  - SpawnPoint
   layers:
   - Default
   - TransparentFX

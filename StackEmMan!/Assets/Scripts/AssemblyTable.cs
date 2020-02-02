@@ -8,7 +8,6 @@ public class AssemblyTable : MonoBehaviour
 
     [SerializeField] private Transform AssemblyPoint;
 
-    private List<GameObject> DisassembledObjOnTable = new List<GameObject>();
     private List<GameObject> AssembledObjOnTable = new List<GameObject>();
 
     [SerializeField] private Transform[] AttachmentPoints;
@@ -20,9 +19,11 @@ public class AssemblyTable : MonoBehaviour
     private Clock clock;
 
     private GameObject smallHand, bigHand, numbers, frame, bell;
-    //TODO: cogs
+    private List<GameObject> cogs;
 
     private int currentPriority, smallHandPriority, bigHandPriority, numbersPriority, framePriority, bellPriority, cogsPriority;
+
+    private SpawnManager spawnManager;
 
     private void Awake()
     {
@@ -40,6 +41,11 @@ public class AssemblyTable : MonoBehaviour
 
             attachmentPointUsed = new bool[AttachmentPoints.Length];
         }
+    }
+
+    void Start()
+    {
+        spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
     }
 
     /// <summary>
@@ -119,14 +125,115 @@ public class AssemblyTable : MonoBehaviour
 
         switch (currentPriority)
         {
-            case 1: 
+            case 1:
+                bool foundFrame = false;
+                bool foundCog = false;
+
+                for (int i = 0; i < AttachmentPoints.Length; i++)
+                {
+                    if (AttachmentPoints[i].childCount == 1)
+                    {
+                        ClockComponent cc = AttachmentPoints[i].GetChild(0).GetComponent<ClockComponent>();
+
+                        if (cc.Type == ComponentType.frame && !foundFrame)
+                        {
+                            foundFrame = true;
+                            frame = cc.gameObject;
+                        }
+                        else if (cc.Type == ComponentType.smallCog || cc.Type == ComponentType.mediumCog || cc.Type == ComponentType.bigCog)
+                        {
+                            foundCog = true;
+                            cogs.Add(cc.gameObject);
+                        }
+                    }
+                }
+
+                if (foundFrame && foundCog)
+                {
+                    currentPriority++;
+                    ResetAttachmentPoints();
+                    spawnManager.Spawn();
+                }
                 break;
             case 2:
+                bool foundNumbers = false;
+                for (int i = 0; i < AttachmentPoints.Length; i++)
+                {
+                    ClockComponent cc = AttachmentPoints[i].GetChild(0).GetComponent<ClockComponent>();
+
+                    if (cc.Type == ComponentType.numbers && !foundNumbers)
+                    {
+                        foundNumbers = true;
+                        numbers = cc.gameObject;
+                    }
+                }
+
+                if (foundNumbers)
+                {
+                    currentPriority++;
+                    ResetAttachmentPoints();
+                    spawnManager.Spawn();
+                }
                 break;
             case 3:
+                bool foundSmallHand = false;
+                bool foundBigHand = false;
+                for (int i = 0; i < AttachmentPoints.Length; i++)
+                {
+                    ClockComponent cc = AttachmentPoints[i].GetChild(0).GetComponent<ClockComponent>();
+
+                    if (cc.Type == ComponentType.smallHand && !foundSmallHand)
+                    {
+                        foundSmallHand = true;
+                        smallHand = cc.gameObject;
+                    }
+                    else if (cc.Type == ComponentType.bigHand && !foundBigHand)
+                    {
+                        foundBigHand = true;
+                        bigHand = cc.gameObject;
+                    }
+                }
+
+                if (foundSmallHand && foundBigHand)
+                {
+                    currentPriority++;
+                    ResetAttachmentPoints();
+                    spawnManager.Spawn();
+                }
                 break;
             case 4:
+                bool foundBell = false;
+                for (int i = 0; i < AttachmentPoints.Length; i++)
+                {
+                    ClockComponent cc = AttachmentPoints[i].GetChild(0).GetComponent<ClockComponent>();
+
+                    if (cc.Type == ComponentType.bell && !foundBell)
+                    {
+                        foundBell = true;
+                        bell = cc.gameObject;
+                    }
+                }
+
+                if (foundBell)
+                {
+                    currentPriority++;
+                    ResetAttachmentPoints();
+                    spawnManager.Spawn();
+                }
                 break;
+        }
+    }
+
+    void ResetAttachmentPoints()
+    {
+        for (int i = 0; i < AttachmentPoints.Length; i++)
+        {
+            if (AttachmentPoints[i].childCount == 1)
+            {
+                Destroy(AttachmentPoints[i].GetChild(0).gameObject);
+            }
+
+            attachmentPointUsed[i] = false;
         }
     }
 

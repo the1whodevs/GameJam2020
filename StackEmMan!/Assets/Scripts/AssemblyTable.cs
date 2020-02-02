@@ -52,7 +52,7 @@ public class AssemblyTable : MonoBehaviour
     /// Called by the player, when interacting with a component in hand.
     /// </summary>
     /// <param name="obj"></param>
-    public void AddComponentToTable(GameObject obj)
+    public bool AddComponentToTable(GameObject obj)
     {
         ComponentType componentTypeToAdd = obj.GetComponent<ClockComponent>().Type;
 
@@ -65,7 +65,7 @@ public class AssemblyTable : MonoBehaviour
                 {
                     attachmentPointUsed[i] = true;
                     obj.transform.SetParent(AttachmentPoints[i].transform, false);
-                    break;
+                    return true;
                 }
             }
         }
@@ -77,7 +77,7 @@ public class AssemblyTable : MonoBehaviour
                 {
                     attachmentPointUsed[i] = true;
                     obj.transform.SetParent(AttachmentPoints[i].transform, false);
-                    break;
+                    return true;
                 }
             }
         }
@@ -89,7 +89,7 @@ public class AssemblyTable : MonoBehaviour
                 {
                     attachmentPointUsed[i] = true;
                     obj.transform.SetParent(AttachmentPoints[i].transform, false);
-                    break;
+                    return true;
                 }
             }
         }
@@ -101,28 +101,16 @@ public class AssemblyTable : MonoBehaviour
                 {
                     attachmentPointUsed[i] = true;
                     obj.transform.SetParent(AttachmentPoints[i].transform, false);
-                    break;
+                    return true;
                 }
             }
         }
+
+        return false;
     }
 
     public void Assemble()
     {
-        // Get all CHILD gameobjects from all attachment points (AttachmentPoints either have 0 childCount, or 1, ALWAYS)
-        // Get the ClockComponent component for all the child gameobjects.
-
-        // For each priority, set the respective variable (e.g. currentPriority == 1 then set frame variable 
-        // to the frame game object (check using ClockComponent.Type)
-
-        // Make sure, for each priority, that we have the minimum required parts on the table
-        // If we do, .SetParent all of the parts to the AssemblyPoint, and 
-        // set the entire attachmentPointUsed array to false (so we can attach objects again!)
-
-        // If the assemble is completed, increase currentPriority by 1!
-
-        // If currentPriority == 5, ClockReady = true!
-
         switch (currentPriority)
         {
             case 1:
@@ -219,9 +207,58 @@ public class AssemblyTable : MonoBehaviour
                     currentPriority++;
                     ResetAttachmentPoints();
                     spawnManager.Spawn();
+                    // TODO: Check with Challenge Manager
                 }
                 break;
         }
+    }
+
+    public void GiveObjectFromTable(Transform handsOfPlayerTryingToGetItem)
+    {
+        float minDist = -1.0f;
+        float currentDist;
+        int minDistIndex = -1;
+
+        for (int i = 0; i < AttachmentPoints.Length; i++)
+        {
+            if (attachmentPointUsed[i])
+            {
+                if (Mathf.Approximately(minDist, -1.0f))
+                {
+                    minDist = Vector3.Distance(handsOfPlayerTryingToGetItem.position, AttachmentPoints[i].position);
+                    currentDist = minDist;
+                    minDistIndex = i;
+                }
+                else
+                {
+                    currentDist = Vector3.Distance(handsOfPlayerTryingToGetItem.position, AttachmentPoints[i].position);
+
+                    if (currentDist < minDist)
+                    {
+                        minDist = currentDist;
+                        minDistIndex = i;
+                    }
+                }
+            }
+        }
+
+        if (!Mathf.Approximately(minDist, -1.0f))
+        {
+            AttachmentPoints[minDistIndex].GetChild(0).SetParent(handsOfPlayerTryingToGetItem, false);
+        }
+    }
+
+    public bool HasItemsOnTable()
+    {
+        for (int i = 0; i < attachmentPointUsed.Length; i++)
+        {
+            if (attachmentPointUsed[i])
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     void ResetAttachmentPoints()

@@ -41,6 +41,11 @@ public class ChallengeManager : MonoBehaviour
     public bool CheckChallengeComplete(GameObject itemDelivered)
     {
         bool ClocksCorrect = Clock.CompareClocks(GetCurrentClock(), itemDelivered.GetComponent<Clock>());
+
+        if (currentIndex==ClocksNeeded.Count-1)
+        {
+            //GameManager.instance();
+        }
         return true;
     }
 

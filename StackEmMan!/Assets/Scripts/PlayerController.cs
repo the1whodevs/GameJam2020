@@ -5,17 +5,19 @@ using Unity;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float _moveSpeed = 20.0f;
     [SerializeField] private Transform _hands;
+    [SerializeField] private float _moveSpeed = 20.0f;
+
     [SerializeField] private GameObject _pickUp;
 
-    //[SerializeField] private GameObject _tool;
-    //[SerializeField] private GameObject _clock;
-
     private Rigidbody _rb;
+
     private ClockComponent _clock;
+
     private Tool _tool;
 
+    private bool holdingItem = false;
+    private bool inAssemblyTableTrigger = false;
 
     private JoystickManager.Joystick _joystick;
 
@@ -35,15 +37,12 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-
         Move();
         Interact();
-
     }
 
     void Move()
     {
-
         transform.forward = new Vector3(Input.GetAxis(_joystick.horizontalMoveAxis), 0.0f, Input.GetAxis(_joystick.verticalMoveAxis));
 
         float horizontal = Input.GetAxis(_joystick.horizontalMoveAxis);
@@ -51,70 +50,67 @@ public class PlayerController : MonoBehaviour
 
         Vector3 translation = new Vector3(horizontal, 0.0f, vertical) * Time.deltaTime * _moveSpeed;
 
-        //_rb.position += translation;
-        //_rb.MovePosition(_rb.position + translation);
-        //_rb.AddForce(translation, ForceMode.Acceleration);
         _rb.velocity = translation.normalized * _moveSpeed;
     }
 
     public void Interact()
     {
-        bool isHoldingSth = false;
-
-        if (Input.GetKeyDown(_joystick.interactButton))
+        if (Input.GetKey(_joystick.interactButton))
         {
-            Debug.Log("Player pressed the interact button");
-
-            if (!isHoldingSth)
+            if (inAssemblyTableTrigger)
             {
-                PickUp();
+                if (holdingItem)
+                {
+                    // Try to place the holded item on the assembly table
+                    bool placedItem = AssemblyTable.instance.AddComponentToTable(_hands.GetChild(0).gameObject);
+
+                    if (placedItem)
+                    {
+                        holdingItem = false;
+                    }
+                }
+                else
+                {
+                    // try to pick something up from the assembly table
+                    if (AssemblyTable.instance.HasItemsOnTable())
+                    {
+                        // (use dist from each attachment point to select which object to pickup)
+                        AssemblyTable.instance.GiveObjectFromTable(_hands);
+                        holdingItem = true;
+                    }
+                    else
+                    {
+                        Debug.Log("No items on table!");
+                    }                    
+                }
             }
-            else if (isHoldingSth)
+            else
             {
-                Drop();
+                if (!holdingItem)
+                {
+                    // try to pick something up
+                }
+                else
+                {
+                    // try to place something on a table/conveyor belt (NOT assembly table)
+                }
             }
-
-
         }
     }
 
-    public void PickUp()
+    void OnTriggerEnter(Collider other)
     {
-        _pickUp.transform.SetParent(_hands);
-
-        if (_pickUp.GetType() == typeof(ClockComponent))
+        if (other.CompareTag("AssemblyTable"))
         {
-            _clock = GetComponent<ClockComponent>();
-        }
-        else if (_pickUp.GetType() == typeof(Tool))
-        {
-            _tool = GetComponent<Tool>();
+            inAssemblyTableTrigger = true;
         }
     }
 
-    public void Drop()
+    private void OnTriggerExit(Collider other)
     {
-        if (Input.GetKeyDown(_joystick.dropButton))
+        if (other.CompareTag("AssemblyTable"))
         {
-            Debug.Log("Player pressed the drop button");
-        }
-    }
-
-    void CheckInput()
-    {
-       // Running = !(Mathf.Approximately(Input.GetAxis("Horizontal"), 0) && Mathf.Approximately(Input.GetAxis("Vertical"), 0.0f));
-    }
-
-    void CheckInput(JoystickManager.Joystick localPlayerJoystick)
-    {
-        //Running = !(Mathf.Approximately(Input.GetAxis(localPlayerJoystick.horizontalMoveAxis), 0.0f) && Mathf.Approximately(Input.GetAxis(localPlayerJoystick.verticalMoveAxis), 0.0f));
-    }
-    void OnTriggerStay(Collider other)
-    {
-        if (other)
-        {
-            Interact();
-            Debug.Log("Player can interact");
+            inAssemblyTableTrigger = false;
         }
     }
 

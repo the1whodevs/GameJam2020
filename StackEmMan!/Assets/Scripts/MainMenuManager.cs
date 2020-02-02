@@ -8,6 +8,11 @@ public class MainMenuManager : MonoBehaviour
 {
     private static MainMenuManager _instance;
 
+    private enum Panel { TitleScreen, PlayerSelection }
+    private Panel _currentPanel = Panel.TitleScreen;
+
+    public bool TryAssigning = false;
+
 
     private void Awake()
     {
@@ -17,16 +22,39 @@ public class MainMenuManager : MonoBehaviour
         }
     }
 
+
     private void Update()
     {
-        if (JoystickManager.GetInstance().GetJoystick(1).Assigned && JoystickManager.GetInstance().GetJoystick(2).Assigned)
+
+        if (_currentPanel == Panel.TitleScreen)
         {
-            if (Input.GetKeyDown(KeyCode.Joystick1Button7) || Input.GetKeyDown(KeyCode.Joystick2Button7))
+
+            if (Input.GetKeyDown(KeyCode.Joystick1Button7))
             {
-                SceneManager.LoadScene("Level 1");
-            } 
+                _currentPanel = Panel.PlayerSelection;
+                UIManager.instance.SwitchToPlayerSelectionScreen();
+                StartCoroutine(TryAssigningAfterDelay(1));
+            }
+            
+        }
+        else if (_currentPanel == Panel.PlayerSelection)
+        {
+            if (JoystickManager.GetInstance().GetJoystick(1).Assigned &&
+                JoystickManager.GetInstance().GetJoystick(2).Assigned)
+            {
+                if (Input.GetKeyDown(KeyCode.Joystick1Button7) || Input.GetKeyDown(KeyCode.Joystick2Button7))
+                {
+                    SceneManager.LoadScene("Level 1");
+                }  
+            }
         }
 
+    }
+
+    IEnumerator TryAssigningAfterDelay(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        TryAssigning = true;
     }
 
     public static MainMenuManager GetInstance() { return _instance; }

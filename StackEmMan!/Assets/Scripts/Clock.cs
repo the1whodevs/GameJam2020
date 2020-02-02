@@ -69,6 +69,7 @@ public class Clock : MonoBehaviour
         clockComponents[cogs.Count + 3] = frame;
         clockComponents[cogs.Count + 4] = numbers;
     }
+
     public static bool CompareClocks(Clock clock1, Clock clock2)
     {
         bool compare,smallHand, bigHand, numbers, frame, bell,cog = false;

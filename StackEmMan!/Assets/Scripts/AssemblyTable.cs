@@ -15,10 +15,12 @@ public class AssemblyTable : MonoBehaviour
 
     private bool[] attachmentPointUsed;
 
+    public bool ClockReady = false;
+
     private Clock clock;
 
     private GameObject smallHand, bigHand, numbers, frame, bell;
-    //cogs
+    //TODO: cogs
 
     private int currentPriority, smallHandPriority, bigHandPriority, numbersPriority, framePriority, bellPriority, cogsPriority;
 
@@ -99,8 +101,22 @@ public class AssemblyTable : MonoBehaviour
         }
     }
 
-    public void AssembleDisassembledObjOnTable()
+    public void Assemble()
     {
+        // Get all CHILD gameobjects from all attachment points (AttachmentPoints either have 0 childCount, or 1, ALWAYS)
+        // Get the ClockComponent component for all the child gameobjects.
+
+        // For each priority, set the respective variable (e.g. currentPriority == 1 then set frame variable 
+        // to the frame game object (check using ClockComponent.Type)
+
+        // Make sure, for each priority, that we have the minimum required parts on the table
+        // If we do, .SetParent all of the parts to the AssemblyPoint, and 
+        // set the entire attachmentPointUsed array to false (so we can attach objects again!)
+
+        // If the assemble is completed, increase currentPriority by 1!
+
+        // If currentPriority == 5, ClockReady = true!
+
         switch (currentPriority)
         {
             case 1: 

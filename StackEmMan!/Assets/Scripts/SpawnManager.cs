@@ -39,24 +39,29 @@ public class SpawnManager : MonoBehaviour
         ConveyorBelt cb = conveyorObjects[0].GetComponent<ConveyorBelt>();
         spawnInterval = cb.Length / cb.CurrentSpeed;
         Debug.Log(spawnInterval);
+
+        StartCoroutine(StartEverythingAfterSeconds(1));
     }
 
-    private void OnGUI()
+    IEnumerator StartEverythingAfterSeconds(int seconds)
     {
-        if (GUILayout.Button("Press me plis"))
-        {
-            // Spawns the first clock
-            Spawn();
+        yield return new WaitForSeconds(seconds);
+        StartEverything();
+    }
 
-            // Starts the ConveyorBeltIn & ConveyorBeltInStarting
-            StartCoroutine(ConveyorBeltSpawn());
+    void StartEverything()
+    {
+        // Spawns the first clock
+        Spawn();
 
-            // Start the ConveyorBeltOut & ConveyorBeltOutStarting
-            GameObject.Find("ConveyorBelts Out").GetComponent<ConveyorBeltOutManager>().StartConveyorOut(spawnInterval);
+        // Starts the ConveyorBeltIn & ConveyorBeltInStarting
+        StartCoroutine(ConveyorBeltSpawn());
 
-            // Spawns the two players
-            PlayerManager.GetInstance().EnablePlayers(_p1Spawn, _p2Spawn);
-        }
+        // Start the ConveyorBeltOut & ConveyorBeltOutStarting
+        GameObject.Find("ConveyorBelts Out").GetComponent<ConveyorBeltOutManager>().StartConveyorOut(spawnInterval);
+
+        // Spawns the two players
+        PlayerManager.GetInstance().EnablePlayers(_p1Spawn, _p2Spawn);
     }
 
     private IEnumerator ConveyorBeltSpawn()

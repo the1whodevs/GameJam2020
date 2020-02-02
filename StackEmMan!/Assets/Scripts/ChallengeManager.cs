@@ -6,6 +6,8 @@ public class ChallengeManager : MonoBehaviour
 {
     int currentIndex = 0;
 
+    public static ChallengeManager instance;
+
     [SerializeField] private int numOfCogs;
     [SerializeField] private int numOfClocks;
 
@@ -13,6 +15,14 @@ public class ChallengeManager : MonoBehaviour
 
     List<GameObject> ClocksNeeded = new List<GameObject>();
     List<List<GameObject>> ClockCompsNeeded = new List<List<GameObject>>();
+
+    void Awake()
+    {
+        if (!instance)
+        {
+            instance = this;
+        }
+    }
 
     void Start()
     {

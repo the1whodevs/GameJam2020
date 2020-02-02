@@ -118,7 +118,7 @@ public class SpawnManager : MonoBehaviour
             GameObject g = Instantiate(nextClock[i]); //, Vector3.zero, Quaternion.identity, spawnPoints[rand]
             g.transform.position = new Vector3(0.0f, 0.5f, 0.0f);
             g.transform.SetParent(spawnPoints[rand], false);
-            g.transform.rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
+            //g.transform.rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
 
             spawnPoints.RemoveAt(rand);
         }

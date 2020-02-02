@@ -77,8 +77,6 @@ public class ClockFactory : MonoBehaviour
     {
         int cogCount = numOfCogs < 0 ? 0 : numOfCogs;
 
-        Clock newClock = new Clock();
-
         List<GameObject> cogsToUse = new List<GameObject>();
 
         if (cogCount > 0)
@@ -132,11 +130,11 @@ public class ClockFactory : MonoBehaviour
     {
         return numbers[Random.Range(0, numbers.Count)];
     }
-    public Clock AssembleClock(GameObject smallHand, GameObject bigHand, GameObject frame, GameObject bell, GameObject numbers, params GameObject[] cogs)
+    public Clock AssembleClock(GameObject smallHand, GameObject bigHand, GameObject frame, GameObject bell, GameObject numbers, List<GameObject> cogs)
     {
         List<GameObject> cogsList = new List<GameObject>();
 
-        for (int i = 0; i < cogs.Length; i++)
+        for (int i = 0; i < cogs.Count; i++)
         {
             cogsList.Add(cogs[i]);
         }

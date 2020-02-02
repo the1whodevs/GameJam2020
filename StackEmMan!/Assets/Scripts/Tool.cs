@@ -18,36 +18,32 @@ public class Tool : MonoBehaviour
 
     private bool isInRange;
     public ToolType CurrentToolType;
-    public float FullCharge = 5f;
+    public float FullCharge = 500f;
     private float totalChargeUsed;
+
     private bool isInUse;
 
     //For Charging screwdriver
-    [SerializeField] private float FullChargeTime = 3f; //3s to fully charge the screwdriver
+    [SerializeField] private float FullChargeTime = 3f; //TODO: UNDO Debug Value 3s to fully charge the screwdriver
     private float chargingTime;
     // private bool isCharging;
     // private bool chargingStarted;
     // private bool chargeComplete;
     // private bool batteryEmpty;
 
-    private void Update()
+    private Vector3 initialScale;
+
+    void Start()
     {
-        if (CurrentToolType == ToolType.Screwdriver)
+        initialScale = transform.localScale;
+    }
+
+    public void FixScale()
+    {
+        if (transform.localScale != initialScale)
         {
-            if (isInUse)
-            {
-                totalChargeUsed += Time.deltaTime;
-
-
-                // if (totalChargeUsed >= FullCharge)
-                // {
-                //     batteryEmpty = true;
-                //     // OnBatteryEmpty(EventArgs.Empty);
-                //     isInUse = false;
-                // }
-            }
+            transform.localScale = initialScale;
         }
-
     }
 
     public bool HasBattery()
@@ -57,22 +53,26 @@ public class Tool : MonoBehaviour
 
     public void Use()
     {
-        if (isInRange)
-        {
-            if (CurrentToolType == ToolType.Hammer)
-            {
-                AssemblyTable.instance.Assemble(); 
-            }
-            else
-            {
-                if (HasBattery())
-                {
-                    AssemblyTable.instance.UsingScrewdriver(); 
-                }
-            }
+        AssemblyTable.instance.Assemble();
 
-            isInUse = true;
-        }
+        //if (isInRange)
+        //{
+        //if (CurrentToolType == ToolType.Hammer)
+        //{
+        //    Debug.Log("Hammering!");
+        //    AssemblyTable.instance.Assemble(); 
+        //}
+        //else
+        //{
+        //    if (HasBattery())
+        //    {
+        //        AssemblyTable.instance.UsingScrewdriver();
+        //        totalChargeUsed += Time.deltaTime;
+        //    }
+        //}
+
+        //isInUse = true;
+        //}
     }
 
     private void OnTriggerEnter(Collider other)
@@ -138,29 +138,6 @@ public class Tool : MonoBehaviour
         }
     }
 
-    // private void OnBatteryEmpty(EventArgs eventArgs)
-    // {
-    //     if (BatteryEmpty != null)
-    //     {
-    //         BatteryEmpty(this, eventArgs);
-    //     }
-    // }
-    //
-    // private void OnChargingStarted(EventArgs eventArgs)
-    // {
-    //     if (ChargingStarted != null)
-    //     {
-    //         ChargingStarted(this, eventArgs);
-    //     }
-    // }
-
-    // private void OnChargingStopped(EventArgs eventArgs)
-    // {
-    //     if (ChargingStopped != null)
-    //     {
-    //         ChargingStopped(this, eventArgs);
-    //     }
-    // }
 
     public void StopUsing()
     {

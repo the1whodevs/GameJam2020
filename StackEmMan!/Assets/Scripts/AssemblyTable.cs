@@ -19,7 +19,7 @@ public class AssemblyTable : MonoBehaviour
     private Clock clock;
 
     private GameObject smallHand, bigHand, numbers, frame, bell;
-    private List<GameObject> cogs;
+    private List<GameObject> cogs = new List<GameObject>();
 
     private int currentPriority, smallHandPriority, bigHandPriority, numbersPriority, framePriority, bellPriority, cogsPriority;
 
@@ -126,15 +126,22 @@ public class AssemblyTable : MonoBehaviour
                     {
                         ClockComponent cc = AttachmentPoints[i].GetChild(0).GetComponent<ClockComponent>();
 
-                        if (cc.Type == ComponentType.frame && !foundFrame)
+                        if (cc)
                         {
-                            foundFrame = true;
-                            frame = cc.gameObject;
-                        }
-                        else if (cc.Type == ComponentType.smallCog || cc.Type == ComponentType.mediumCog || cc.Type == ComponentType.bigCog)
-                        {
-                            foundCog = true;
-                            cogs.Add(cc.gameObject);
+                            if (cc.Type == ComponentType.frame && !foundFrame)
+                            {
+                                foundFrame = true;
+                                frame = cc.gameObject;
+                            }
+                            else if (cc.Type == ComponentType.smallCog || cc.Type == ComponentType.mediumCog || cc.Type == ComponentType.bigCog)
+                            {
+                                foundCog = true;
+                                cogs.Add(cc.gameObject);
+                            }
+                            else
+                            {
+                                Debug.Log("No clock component attached!");
+                            }
                         }
                     }
                 }
@@ -143,19 +150,23 @@ public class AssemblyTable : MonoBehaviour
                 {
                     currentPriority++;
                     ResetAttachmentPoints();
-                    spawnManager.Spawn();
+                    //spawnManager.Spawn();
                 }
                 break;
             case 2:
                 bool foundNumbers = false;
+
                 for (int i = 0; i < AttachmentPoints.Length; i++)
                 {
-                    ClockComponent cc = AttachmentPoints[i].GetChild(0).GetComponent<ClockComponent>();
-
-                    if (cc.Type == ComponentType.numbers && !foundNumbers)
+                    if (AttachmentPoints[i].childCount > 0)
                     {
-                        foundNumbers = true;
-                        numbers = cc.gameObject;
+                        ClockComponent cc = AttachmentPoints[i].GetChild(0).GetComponent<ClockComponent>();
+
+                        if (cc.Type == ComponentType.numbers && !foundNumbers)
+                        {
+                            foundNumbers = true;
+                            numbers = cc.gameObject;
+                        }
                     }
                 }
 
@@ -163,25 +174,29 @@ public class AssemblyTable : MonoBehaviour
                 {
                     currentPriority++;
                     ResetAttachmentPoints();
-                    spawnManager.Spawn();
+                    //spawnManager.Spawn();
                 }
                 break;
             case 3:
                 bool foundSmallHand = false;
                 bool foundBigHand = false;
+
                 for (int i = 0; i < AttachmentPoints.Length; i++)
                 {
-                    ClockComponent cc = AttachmentPoints[i].GetChild(0).GetComponent<ClockComponent>();
+                    if (AttachmentPoints[i].childCount > 0)
+                    {
+                        ClockComponent cc = AttachmentPoints[i].GetChild(0).GetComponent<ClockComponent>();
 
-                    if (cc.Type == ComponentType.smallHand && !foundSmallHand)
-                    {
-                        foundSmallHand = true;
-                        smallHand = cc.gameObject;
-                    }
-                    else if (cc.Type == ComponentType.bigHand && !foundBigHand)
-                    {
-                        foundBigHand = true;
-                        bigHand = cc.gameObject;
+                        if (cc.Type == ComponentType.smallHand && !foundSmallHand)
+                        {
+                            foundSmallHand = true;
+                            smallHand = cc.gameObject;
+                        }
+                        else if (cc.Type == ComponentType.bigHand && !foundBigHand)
+                        {
+                            foundBigHand = true;
+                            bigHand = cc.gameObject;
+                        }
                     }
                 }
 
@@ -189,19 +204,25 @@ public class AssemblyTable : MonoBehaviour
                 {
                     currentPriority++;
                     ResetAttachmentPoints();
-                    spawnManager.Spawn();
+                    //spawnManager.Spawn();
                 }
                 break;
             case 4:
+                Debug.Log("Assembling last part");
+
                 bool foundBell = false;
+
                 for (int i = 0; i < AttachmentPoints.Length; i++)
                 {
-                    ClockComponent cc = AttachmentPoints[i].GetChild(0).GetComponent<ClockComponent>();
-
-                    if (cc.Type == ComponentType.bell && !foundBell)
+                    if (AttachmentPoints[i].childCount > 0)
                     {
-                        foundBell = true;
-                        bell = cc.gameObject;
+                        ClockComponent cc = AttachmentPoints[i].GetChild(0).GetComponent<ClockComponent>();
+
+                        if (cc.Type == ComponentType.bell && !foundBell)
+                        {
+                            foundBell = true;
+                            bell = cc.gameObject;
+                        }
                     }
                 }
 
@@ -209,23 +230,36 @@ public class AssemblyTable : MonoBehaviour
                 {
                     currentPriority++;
                     ResetAttachmentPoints();
-                    spawnManager.Spawn();
-                    // TODO: Check with Challenge Manager
+                    //spawnManager.Spawn();
+                    //Clock clock = ClockFactory.instance.AssembleClock(smallHand, bigHand, frame, bell, numbers, cogs);
+
+                    GameObject finishedClock = new GameObject("New clock!");
+
+                    finishedClock.AddComponent(typeof(Clock));
+                    finishedClock.GetComponent<Clock>()
+                        .SetClockComponents(cogs, smallHand, bigHand, bell, frame, numbers);
+
+                    ChallengeManager.instance.CheckChallengeComplete(finishedClock);
                 }
                 break;
         }
+
+        Debug.Log("Assembled!");
     }
 
     public void UsingScrewdriver()
     {
-        if (currentPriority == 2 || currentPriority == 3 || currentPriority == 4)
+        if (HasItemsOnTable() && ( currentPriority == 2 || currentPriority == 3 || currentPriority == 4))
         {
             currentAssemblyTimer += Time.deltaTime;
 
-            if (currentAssemblyTimer >= neededAssemblyTime)
+            Debug.Log("Screwing...");
+
+            if (currentAssemblyTimer >= neededAssemblyTime && HasItemsOnTable())
             {
                 currentAssemblyTimer = 0.0f;
                 Assemble();
+                Debug.Log("Screwed!");
             }
         }
     }
@@ -262,6 +296,7 @@ public class AssemblyTable : MonoBehaviour
         if (!Mathf.Approximately(minDist, -1.0f))
         {
             AttachmentPoints[minDistIndex].GetChild(0).SetParent(handsOfPlayerTryingToGetItem, false);
+            attachmentPointUsed[minDistIndex] = false;
         }
     }
 
@@ -284,7 +319,8 @@ public class AssemblyTable : MonoBehaviour
         {
             if (AttachmentPoints[i].childCount == 1)
             {
-                Destroy(AttachmentPoints[i].GetChild(0).gameObject);
+                AttachmentPoints[i].DetachChildren();
+                //Destroy(AttachmentPoints[i].GetChild(0).gameObject);
             }
 
             attachmentPointUsed[i] = false;

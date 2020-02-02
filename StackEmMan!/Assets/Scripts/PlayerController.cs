@@ -3,13 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity;
+using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Transform _hands;
     [SerializeField] private float _moveSpeed = 20.0f;
-
-    [SerializeField] private GameObject _pickUp;
 
     private bool HasSubscribedToScrewdriverEvents;
 
@@ -46,6 +45,7 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
+
         transform.forward = new Vector3(Input.GetAxis(_joystick.horizontalMoveAxis), 0.0f, Input.GetAxis(_joystick.verticalMoveAxis));
 
         float horizontal = Input.GetAxis(_joystick.horizontalMoveAxis);
@@ -58,35 +58,56 @@ public class PlayerController : MonoBehaviour
 
     public void Interact()
     {
-        if (Input.GetKey(_joystick.interactButton))
+        Tool toolInHand = _hands.childCount > 0 ? _hands.GetChild(0).GetComponent<Tool>() : null;
+
+        if (toolInHand && toolInHand.CurrentToolType == ToolType.Screwdriver)
         {
+            if (Input.GetKey(_joystick.interactButton) && inAssemblyTableTrigger)
+            {
+                toolInHand.Use();
+            }
+        }
+        else if (Input.GetKeyDown(_joystick.interactButton))
+        {
+            Debug.Log(name + " trying to interact!");
+
             if (inAssemblyTableTrigger)
             {
+                Debug.Log(name + " is in assembly table trigger!");
+
                 if (holdingItem)
                 {
+                    Debug.Log(name + " is in holding an item in the assembly table trigger!");
+
                     if (_hands.GetChild(0).GetComponent<ClockComponent>())
                     {
-                        // Try to place the holded item on the assembly table
+                        Debug.Log(name + " is in holding a ClockComponent in the assembly table trigger!");
+
+                        // Try to place the held item on the assembly table
                         bool placedItem = AssemblyTable.instance.AddComponentToTable(_hands.GetChild(0).gameObject);
 
                         if (placedItem)
                         {
+                            Debug.Log(name + " placed a ClockComponent on the assembly table!");
                             holdingItem = false;
                         } 
                     }
                     else
                     {
+                        Debug.Log("Trying to use a tool in the Assembly Table!");
                         Tool heldTool = _hands.GetChild(0).GetComponent<Tool>();
 
                         switch (heldTool.CurrentToolType)
                         {
                             case ToolType.Hammer:
+                                Debug.Log("Using hammer!");
                                 heldTool.Use();
                                 break;
                             case ToolType.Screwdriver:
                                 if (heldTool.HasBattery())
                                 {
-                                    heldTool.Use(); 
+                                    Debug.Log("Using screwdriver!");
+                                heldTool.Use(); 
                                 }
                                 else
                                 {
@@ -118,12 +139,14 @@ public class PlayerController : MonoBehaviour
             {
                 if (!holdingItem)
                 {
-                    // try to pick something up
+                    Debug.Log(name + " is not holding anything!");
+                    
                     RaycastHit hit;
                     Ray ray = new Ray(transform.position, transform.forward);
                     
-                    if (Physics.Raycast(ray, out hit, 0.375f))
+                    if (Physics.Raycast(ray, out hit, 0.5f))
                     {
+                        
                         Tool toolHit = hit.collider.gameObject.GetComponent<Tool>();
                         ClockComponent ccHit = hit.collider.gameObject.GetComponent<ClockComponent>();
                         if (toolHit)
@@ -135,17 +158,52 @@ public class PlayerController : MonoBehaviour
                             }
 
                             hit.transform.SetParent(_hands, false);
+                            hit.collider.gameObject.GetComponent<BoxCollider>().enabled = false;
+                            holdingItem = true;
                         }
                         else if (ccHit)
                         {
+                            Debug.Log(name + " is about to pickup a ClockComponent!");
+
                             hit.transform.SetParent(_hands, false);
+
+                            hit.collider.gameObject.GetComponent<BoxCollider>().enabled = false;
+
+                            holdingItem = true;
                         }
                     }
                 }
                 else
                 {
                     // try to place something on a table/conveyor belt (NOT assembly table)
+                    //hit.collider.gameObject.GetComponent<BoxCollider>().enabled = true;
                 }
+            }
+        }
+
+        if (Input.GetKeyDown(_joystick.dropButton))
+        {
+            if (holdingItem)
+            {
+                Tool tool = _hands.GetChild(0).GetComponent<Tool>();
+                ClockComponent cc = _hands.GetChild(0).GetComponent<ClockComponent>();
+
+                Transform child = _hands.GetChild(0);
+
+                child.GetComponent<BoxCollider>().enabled = true;
+
+                _hands.DetachChildren();
+
+                if (tool)
+                {
+                    tool.FixScale();
+                }
+                else
+                {
+                    cc.FixScale();
+                }
+
+                holdingItem = false;
             }
         }
     }

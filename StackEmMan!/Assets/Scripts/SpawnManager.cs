@@ -108,13 +108,17 @@ public class SpawnManager : MonoBehaviour
         }
 
         List<GameObject> nextClock = new List<GameObject>();
+
         nextClock = challengeManager.GetNextClock();
 
         for (int i = 0; i < nextClock.Count; i++)
         {
             int rand = Random.Range(0, spawnPoints.Count);
 
-            Instantiate(nextClock[i], Vector3.zero, Quaternion.identity, spawnPoints[rand]);
+            GameObject g = Instantiate(nextClock[i]); //, Vector3.zero, Quaternion.identity, spawnPoints[rand]
+            g.transform.position = new Vector3(0.0f, 0.5f, 0.0f);
+            g.transform.SetParent(spawnPoints[rand], false);
+            g.transform.rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
 
             spawnPoints.RemoveAt(rand);
         }

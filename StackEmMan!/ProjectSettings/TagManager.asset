@@ -10,6 +10,9 @@ TagManager:
   - StartingBelt
   - ConveyorBeltOut
   - StartingBeltOut
+  - AssemblyTable
+  - ChargingBase
+  - FxTemporaire
   layers:
   - Default
   - TransparentFX

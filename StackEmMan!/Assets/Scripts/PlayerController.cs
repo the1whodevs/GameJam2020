@@ -169,5 +169,6 @@ public class PlayerController : MonoBehaviour
     protected void Screwdriver_ChargingComplete(object sender, EventArgs e)
     {
         // TODO: Hide "Needed charging" icon if on
+        Debug.Log("Charging complete!");
     }
 }

@@ -6,8 +6,15 @@ using Unity;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed = 20.0f;
-    
+    [SerializeField] private Transform _hands;
+    [SerializeField] private GameObject _pickUp;
+
+    //[SerializeField] private GameObject _tool;
+    //[SerializeField] private GameObject _clock;
+
     private Rigidbody _rb;
+    private ClockComponent _clock;
+    private Tool _tool;
 
 
     private JoystickManager.Joystick _joystick;
@@ -21,14 +28,17 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+
         _rb = GetComponent<Rigidbody>();
+        
     }
 
     void FixedUpdate()
     {
 
         Move();
-        
+        Interact();
+
     }
 
     void Move()
@@ -47,14 +57,46 @@ public class PlayerController : MonoBehaviour
         _rb.velocity = translation.normalized * _moveSpeed;
     }
 
-    void Interact()
+    public void Interact()
     {
-        //bool isHolding;
-        //_joystick.interactButton
-        if (Input.GetKey(_joystick.interactButton))
-        {
+        bool isHoldingSth = false;
 
-            //isHolding = true;
+        if (Input.GetKeyDown(_joystick.interactButton))
+        {
+            Debug.Log("Player pressed the interact button");
+
+            if (!isHoldingSth)
+            {
+                PickUp();
+            }
+            else if (isHoldingSth)
+            {
+                Drop();
+            }
+
+
+        }
+    }
+
+    public void PickUp()
+    {
+        _pickUp.transform.SetParent(_hands);
+
+        if (_pickUp.GetType() == typeof(ClockComponent))
+        {
+            _clock = GetComponent<ClockComponent>();
+        }
+        else if (_pickUp.GetType() == typeof(Tool))
+        {
+            _tool = GetComponent<Tool>();
+        }
+    }
+
+    public void Drop()
+    {
+        if (Input.GetKeyDown(_joystick.dropButton))
+        {
+            Debug.Log("Player pressed the drop button");
         }
     }
 

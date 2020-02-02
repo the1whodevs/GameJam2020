@@ -109,5 +109,13 @@ public class PlayerController : MonoBehaviour
     {
         //Running = !(Mathf.Approximately(Input.GetAxis(localPlayerJoystick.horizontalMoveAxis), 0.0f) && Mathf.Approximately(Input.GetAxis(localPlayerJoystick.verticalMoveAxis), 0.0f));
     }
+    void OnTriggerStay(Collider other)
+    {
+        if (other)
+        {
+            Interact();
+            Debug.Log("Player can interact");
+        }
+    }
 
 }

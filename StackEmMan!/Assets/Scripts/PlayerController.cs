@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity;
@@ -9,6 +10,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _moveSpeed = 20.0f;
 
     [SerializeField] private GameObject _pickUp;
+
+    private bool HasSubscribedToScrewdriverEvents;
 
     private Rigidbody _rb;
 
@@ -61,12 +64,39 @@ public class PlayerController : MonoBehaviour
             {
                 if (holdingItem)
                 {
-                    // Try to place the holded item on the assembly table
-                    bool placedItem = AssemblyTable.instance.AddComponentToTable(_hands.GetChild(0).gameObject);
-
-                    if (placedItem)
+                    if (_hands.GetChild(0).GetComponent<ClockComponent>())
                     {
-                        holdingItem = false;
+                        // Try to place the holded item on the assembly table
+                        bool placedItem = AssemblyTable.instance.AddComponentToTable(_hands.GetChild(0).gameObject);
+
+                        if (placedItem)
+                        {
+                            holdingItem = false;
+                        } 
+                    }
+                    else
+                    {
+                        Tool heldTool = _hands.GetChild(0).GetComponent<Tool>();
+
+                        switch (heldTool.CurrentToolType)
+                        {
+                            case ToolType.Hammer:
+                                heldTool.Use();
+                                break;
+                            case ToolType.Screwdriver:
+                                if (heldTool.HasBattery())
+                                {
+                                    heldTool.Use(); 
+                                }
+                                else
+                                {
+                                    // TODO: Show charge needed icon!
+                                    Debug.Log("Charging required!");
+                                }
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
                     }
                 }
                 else
@@ -89,6 +119,28 @@ public class PlayerController : MonoBehaviour
                 if (!holdingItem)
                 {
                     // try to pick something up
+                    RaycastHit hit;
+                    Ray ray = new Ray(transform.position, transform.forward);
+                    
+                    if (Physics.Raycast(ray, out hit, 0.375f))
+                    {
+                        Tool toolHit = hit.collider.gameObject.GetComponent<Tool>();
+                        ClockComponent ccHit = hit.collider.gameObject.GetComponent<ClockComponent>();
+                        if (toolHit)
+                        {
+                            if (toolHit.CurrentToolType == ToolType.Screwdriver && !HasSubscribedToScrewdriverEvents)
+                            {
+                                HasSubscribedToScrewdriverEvents = true;
+                                toolHit.ChargingComplete += Screwdriver_ChargingComplete;
+                            }
+
+                            hit.transform.SetParent(_hands, false);
+                        }
+                        else if (ccHit)
+                        {
+                            hit.transform.SetParent(_hands, false);
+                        }
+                    }
                 }
                 else
                 {
@@ -114,4 +166,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    protected void Screwdriver_ChargingComplete(object sender, EventArgs e)
+    {
+        // TODO: Hide "Needed charging" icon if on
+    }
 }

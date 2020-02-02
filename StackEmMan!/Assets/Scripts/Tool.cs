@@ -11,9 +11,10 @@ public enum ToolType
 
 public class Tool : MonoBehaviour
 {
-    public event EventHandler BatteryEmpty;
-    public event EventHandler ChargingStarted;
-    public event EventHandler ChargingStopped;
+    // public event EventHandler BatteryEmpty;
+    // public event EventHandler ChargingStarted;
+    // public event EventHandler ChargingStopped;
+    public event EventHandler ChargingComplete;
 
     private bool isInRange;
     public ToolType CurrentToolType;
@@ -24,9 +25,10 @@ public class Tool : MonoBehaviour
     //For Charging screwdriver
     [SerializeField] private float FullChargeTime = 3f; //3s to fully charge the screwdriver
     private float chargingTime;
-    private bool isCharging;
-    private bool chargingStarted;
-    private bool chargeComplete;
+    // private bool isCharging;
+    // private bool chargingStarted;
+    // private bool chargeComplete;
+    // private bool batteryEmpty;
 
     private void Update()
     {
@@ -37,46 +39,37 @@ public class Tool : MonoBehaviour
                 totalChargeUsed += Time.deltaTime;
 
 
-                if (totalChargeUsed >= FullCharge)
-                {
-                    OnBatteryEmpty(EventArgs.Empty);
-                    isInUse = false;
-                }
+                // if (totalChargeUsed >= FullCharge)
+                // {
+                //     batteryEmpty = true;
+                //     // OnBatteryEmpty(EventArgs.Empty);
+                //     isInUse = false;
+                // }
             }
         }
 
-        if (isCharging)
-        {
-            chargingTime += Time.deltaTime;
-
-            //Notify that the charging has started;
-            if (!chargingStarted)
-            {
-                OnChargingStarted(EventArgs.Empty);
-
-                chargingStarted = true;
-                chargeComplete = false;
-            }
-
-            if (chargingTime >= FullChargeTime)
-            {
-                isCharging = false;
-                chargeComplete = true;
-                chargingTime = 0f;
-
-                ChargingEventArgs chargingEventArgs = new ChargingEventArgs(chargeComplete);
-
-                OnChargingStopped(chargingEventArgs);
-            }
-        }
     }
 
+    public bool HasBattery()
+    {
+        return totalChargeUsed < FullCharge;
+    }
 
     public void Use()
     {
         if (isInRange)
         {
-            AssemblyTable.instance.Assemble(CurrentToolType);
+            if (CurrentToolType == ToolType.Hammer)
+            {
+                AssemblyTable.instance.Assemble(); 
+            }
+            else
+            {
+                if (HasBattery())
+                {
+                    AssemblyTable.instance.UsingScrewdriver(); 
+                }
+            }
 
             isInUse = true;
         }
@@ -97,49 +90,77 @@ public class Tool : MonoBehaviour
             isInRange = false;
         }
 
-        if (other.CompareTag("ChargingBase") && CurrentToolType == ToolType.Screwdriver && isCharging)
-        {
-            isCharging = false;
-
-            ChargingEventArgs chargingEventArgs = new ChargingEventArgs(chargeComplete);
-
-            OnChargingStopped(chargingEventArgs);
-        }
+        // if (other.CompareTag("ChargingBase") && CurrentToolType == ToolType.Screwdriver && isCharging)
+        // {
+        //     isCharging = false;
+        //
+        //     ChargingEventArgs chargingEventArgs = new ChargingEventArgs(chargeComplete);
+        //
+        //     OnChargingStopped(chargingEventArgs);
+        // }
     }
 
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("ChargingBase") && CurrentToolType == ToolType.Screwdriver)
         {
-            isCharging = true;
+            chargingTime += Time.deltaTime;
+
+            //Notify that the charging has started;
+            // if (!chargingStarted)
+            // {
+            //     // OnChargingStarted(EventArgs.Empty);
+            //
+            //     chargingStarted = true;
+            //     chargeComplete = false;
+            // }
+
+            if (chargingTime >= FullChargeTime)
+            {
+                // isCharging = false;
+                // chargeComplete = true;
+                chargingTime = 0f;
+
+                // ChargingEventArgs chargingEventArgs = new ChargingEventArgs(chargeComplete);
+
+                // OnChargingStopped(chargingEventArgs);
+
+                OnChargingComplete(EventArgs.Empty);
+            }
         }
     }
 
-
-
-    private void OnBatteryEmpty(EventArgs eventArgs)
+    private void OnChargingComplete(EventArgs eventArgs)
     {
-        if (BatteryEmpty != null)
+        if (ChargingComplete != null)
         {
-            BatteryEmpty(this, eventArgs);
+            ChargingComplete(this, eventArgs);
         }
     }
 
-    private void OnChargingStarted(EventArgs eventArgs)
-    {
-        if (ChargingStarted != null)
-        {
-            ChargingStarted(this, eventArgs);
-        }
-    }
+    // private void OnBatteryEmpty(EventArgs eventArgs)
+    // {
+    //     if (BatteryEmpty != null)
+    //     {
+    //         BatteryEmpty(this, eventArgs);
+    //     }
+    // }
+    //
+    // private void OnChargingStarted(EventArgs eventArgs)
+    // {
+    //     if (ChargingStarted != null)
+    //     {
+    //         ChargingStarted(this, eventArgs);
+    //     }
+    // }
 
-    private void OnChargingStopped(EventArgs eventArgs)
-    {
-        if (ChargingStopped != null)
-        {
-            ChargingStopped(this, eventArgs);
-        }
-    }
+    // private void OnChargingStopped(EventArgs eventArgs)
+    // {
+    //     if (ChargingStopped != null)
+    //     {
+    //         ChargingStopped(this, eventArgs);
+    //     }
+    // }
 
     public void StopUsing()
     {

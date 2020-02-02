@@ -25,6 +25,9 @@ public class AssemblyTable : MonoBehaviour
 
     private SpawnManager spawnManager;
 
+    private float neededAssemblyTime = 1.5f;
+    private float currentAssemblyTimer = 0.0f;
+
     private void Awake()
     {
         if (!instance)
@@ -210,6 +213,20 @@ public class AssemblyTable : MonoBehaviour
                     // TODO: Check with Challenge Manager
                 }
                 break;
+        }
+    }
+
+    public void UsingScrewdriver()
+    {
+        if (currentPriority == 2 || currentPriority == 3 || currentPriority == 4)
+        {
+            currentAssemblyTimer += Time.deltaTime;
+
+            if (currentAssemblyTimer >= neededAssemblyTime)
+            {
+                currentAssemblyTimer = 0.0f;
+                Assemble();
+            }
         }
     }
 

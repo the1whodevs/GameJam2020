@@ -1,7 +1,25 @@
 fileFormatVersion: 2
 guid: ba23bfac00ddae84795d8e7e4da89cbd
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 7790203097515640350
+    second: Karen_0
+  - first:
+      213: 3903355175273889594
+    second: Karen_1
+  - first:
+      213: 800253004993234336
+    second: Karen_2
+  - first:
+      213: 2573592371861221191
+    second: Karen_0
+  - first:
+      213: -2316259841389791551
+    second: Karen_1
+  - first:
+      213: -308957427206692898
+    second: Karen_2
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -84,7 +102,70 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Karen_0
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 250
+        width: 51
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74f617170ac37b320800000000000000
+      internalID: 2573592371861221191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Karen_1
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 113
+        width: 322
+        height: 286
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c6757242fdfadfd0800000000000000
+      internalID: -2316259841389791551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Karen_2
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 237
+        width: 51
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: edf50ac5bdc56bbf0800000000000000
+      internalID: -308957427206692898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []

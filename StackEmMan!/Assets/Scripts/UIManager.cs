@@ -9,7 +9,8 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
 
-    public Button PlayButton;
+    [SerializeField] private GameObject _titleScreen;
+    [SerializeField] private GameObject _playerSelectionScreen;
 
     [SerializeField] private GameObject _p1Ready;
     [SerializeField] private GameObject _p2Ready;
@@ -33,6 +34,9 @@ public class UIManager : MonoBehaviour
             _p2PressStart.SetActive(true);
 
             _playButton.SetActive(false);
+
+            _titleScreen.SetActive(true);
+            _playerSelectionScreen.SetActive(false);
         }
     }
 
@@ -50,15 +54,19 @@ public class UIManager : MonoBehaviour
         {
             _p2Ready.SetActive(true);
             _p2PressStart.SetActive(false);
-            EnableStart();
+            _playButton.SetActive(true);
         }
 
     }
 
-    public void EnableStart()
+    public void SwitchToPlayerSelectionScreen()
     {
-
-        _playButton.SetActive(true);
+        _titleScreen.SetActive(false);
+        _playerSelectionScreen.SetActive(true);
+        _p1PressStart.SetActive(true);
+        _p2PressStart.SetActive(true);
+        _p1Ready.SetActive(false);
+        _p2Ready.SetActive(false);
     }
     
 }

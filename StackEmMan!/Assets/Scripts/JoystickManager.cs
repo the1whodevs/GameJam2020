@@ -23,21 +23,24 @@ public class JoystickManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        if (Input.GetKeyDown(KeyCode.Joystick1Button7))
-        {
-            if (!GetJoystick(1).Assigned)
-            {
-                PlayerManager.GetInstance().AssignJoystickToPlayer(1);
-            }
-        }
 
-        if (Input.GetKeyDown(KeyCode.Joystick2Button7))
+        if (MainMenuManager.GetInstance().TryAssigning)
         {
-            if (!GetJoystick(2).Assigned)
+            if (Input.GetKeyDown(KeyCode.Joystick1Button7))
             {
-                PlayerManager.GetInstance().AssignJoystickToPlayer(2);
+                if (!GetJoystick(1).Assigned)
+                {
+                    PlayerManager.GetInstance().AssignJoystickToPlayer(1);
+                }
             }
+
+            if (Input.GetKeyDown(KeyCode.Joystick2Button7))
+            {
+                if (!GetJoystick(2).Assigned)
+                {
+                    PlayerManager.GetInstance().AssignJoystickToPlayer(2);
+                }
+            } 
         }
 
     }

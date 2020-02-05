@@ -11,16 +11,12 @@ public class ConveyorItemDeactivator : MonoBehaviour
     {
         conveyorBelt = GetComponentInParent<ConveyorBelt>();
         boundaryTag = conveyorBelt.BoundaryTag;
-
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D col)
     {
-        if (other.tag == boundaryTag)
+        if (col.transform.CompareTag(boundaryTag))
         {
-            //FOR TESTING ONLY
-            // Debug.Log(name + " hit " + other.name);
-
             conveyorBelt.ResetItem();
         }
     }

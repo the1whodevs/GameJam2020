@@ -58,7 +58,7 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(ConveyorBeltSpawn());
 
         // Start the ConveyorBeltOut & ConveyorBeltOutStarting
-        GameObject.Find("ConveyorBelts Out").GetComponent<ConveyorBeltOutManager>().StartConveyorOut(spawnInterval);
+        GameObject.Find("Conveyor Belts - Out").GetComponent<ConveyorBeltOutManager>().StartConveyorOut(spawnInterval);
 
         // Spawns the two players
         PlayerManager.GetInstance().EnablePlayers(_p1Spawn, _p2Spawn);
@@ -102,9 +102,12 @@ public class SpawnManager : MonoBehaviour
                 {
                     spawnPoints.Add(g.transform.GetChild(i));
 
-                    if (spawnPoints[i].childCount > 0)
+                    for (int j = 0; j < spawnPoints[i].childCount; j++)
                     {
-                        Destroy(spawnPoints[i].GetChild(0));
+                        if (spawnPoints[i].GetChild(j).CompareTag("ClockComponent"))
+                        {
+                            Destroy(spawnPoints[i].GetChild(j));
+                        }
                     }
                 }
             }

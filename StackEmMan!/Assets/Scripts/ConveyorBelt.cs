@@ -22,11 +22,10 @@ public class ConveyorBelt : MonoBehaviour
     [SerializeField] private float length = 5f;
     [SerializeField] private MoveDirection moveDirection = MoveDirection.Down;
 
-    // private bool actionInProgress;
-
     bool isRunning = false;  //MOVING ITEMS MUST BE ENABLED BY THE SPAWNER
     private float currentSpeed;
-    private Vector3 velocity;
+    //private Vector3 velocity;
+    private Vector2 velocity;
     protected Vector3 StartingPosition;
 
     public Transform[] SpawnPoints => spawnPoints;
@@ -45,9 +44,7 @@ public class ConveyorBelt : MonoBehaviour
 
     protected virtual void Awake()
     {
-        GameObject.DontDestroyOnLoad(gameObject);
-
-        //GUIManager.GameReset += GuiManager_GameReset;
+        DontDestroyOnLoad(gameObject);
 
         currentSpeed = startingSpeed;
 
@@ -55,15 +52,11 @@ public class ConveyorBelt : MonoBehaviour
         switch (moveDirection)
         {
             case MoveDirection.Up:
-
-                velocity = currentSpeed * Vector3.forward;
-
+                velocity = currentSpeed * Vector3.up;
             break;
 
             case MoveDirection.Down:
-
-                velocity = currentSpeed * Vector3.back;
-
+                velocity = currentSpeed * Vector3.down;
             break;
 
             default:
@@ -71,19 +64,12 @@ public class ConveyorBelt : MonoBehaviour
             break;
         }
 
-
-        // isRunning = true;
-        // gameObject.SetActive(false);
-        
     }
 
     void Start()
     {
-        //CurrentTransform = transform;
-
         //set startingPosition so that the GameObject's position can be reset to that, after it gets Deactivated
         StartingPosition = transform.position;
-
     }
 
     // Update is called once per frame
@@ -91,16 +77,17 @@ public class ConveyorBelt : MonoBehaviour
     {
         if (isRunning)
         {
-            transform.localPosition += velocity * Time.deltaTime;
+            Vector2 movement = velocity * Time.deltaTime;
+            transform.localPosition += new Vector3(movement.x, movement.y, 0.0f);
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (other.tag == boundaryTag)
+        if (collision.tag == boundaryTag)
         {
             //FOR TESTING ONLY
-            Debug.Log(name + " hit " + other.name);
+            Debug.Log(name + " hit " + collision.name);
 
             ResetItem();
         }
@@ -108,9 +95,6 @@ public class ConveyorBelt : MonoBehaviour
 
     public virtual void ResetItem()
     {
-        //IsRunning = false;
-
-
         //reset position
         transform.position = StartingPosition;
 

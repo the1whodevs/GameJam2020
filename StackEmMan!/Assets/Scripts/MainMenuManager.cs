@@ -44,7 +44,7 @@ public class MainMenuManager : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.Joystick1Button7) || Input.GetKeyDown(KeyCode.Joystick2Button7))
                 {
-                    SceneManager.LoadScene("Level 1");
+                    SceneManager.LoadScene(/*"Level 1"*/"Level 1 - 2D");
                 }  
             }
         }

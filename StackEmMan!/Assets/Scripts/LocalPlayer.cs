@@ -6,8 +6,6 @@ public class LocalPlayer : MonoBehaviour
 {
     public int pNum;
 
-    public Color pNameColor;
-
     public bool IsAvailable = true;
 
     private JoystickManager.Joystick _pJoystick;

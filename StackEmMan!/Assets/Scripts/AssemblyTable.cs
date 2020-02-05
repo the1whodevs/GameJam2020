@@ -12,6 +12,9 @@ public class AssemblyTable : MonoBehaviour
 
     [SerializeField] private Transform[] AttachmentPoints;
 
+    private Grabbable[] itemsOnPoints;
+    private List<Grabbable> itemsOnAssemblyPoint = new List<Grabbable>();
+
     private bool[] attachmentPointUsed;
 
     public bool ClockReady = false;
@@ -43,6 +46,7 @@ public class AssemblyTable : MonoBehaviour
             bellPriority = 4;
 
             attachmentPointUsed = new bool[AttachmentPoints.Length];
+            itemsOnPoints = new Grabbable[AttachmentPoints.Length];
         }
     }
 
@@ -58,6 +62,7 @@ public class AssemblyTable : MonoBehaviour
     public bool AddComponentToTable(GameObject obj)
     {
         ComponentType componentTypeToAdd = obj.GetComponent<ClockComponent>().Type;
+        Grabbable grabbable = obj.GetComponent<Grabbable>();
 
         if (currentPriority==1 && ((componentTypeToAdd == ComponentType.bigCog) || (componentTypeToAdd == ComponentType.mediumCog)
             || (componentTypeToAdd == ComponentType.smallCog) || (componentTypeToAdd == ComponentType.frame)))
@@ -67,7 +72,9 @@ public class AssemblyTable : MonoBehaviour
                 if (!attachmentPointUsed[i])
                 {
                     attachmentPointUsed[i] = true;
-                    obj.transform.SetParent(AttachmentPoints[i].transform, false);
+                    //obj.transform.SetParent(AttachmentPoints[i].transform, false);
+                    grabbable.PickUp(AttachmentPoints[i].transform);
+                    itemsOnPoints[i] = grabbable;
                     return true;
                 }
             }
@@ -79,7 +86,9 @@ public class AssemblyTable : MonoBehaviour
                 if (!attachmentPointUsed[i])
                 {
                     attachmentPointUsed[i] = true;
-                    obj.transform.SetParent(AttachmentPoints[i].transform, false);
+                    //obj.transform.SetParent(AttachmentPoints[i].transform, false);
+                    grabbable.PickUp(AttachmentPoints[i].transform);
+                    itemsOnPoints[i] = grabbable;
                     return true;
                 }
             }
@@ -91,7 +100,9 @@ public class AssemblyTable : MonoBehaviour
                 if (!attachmentPointUsed[i])
                 {
                     attachmentPointUsed[i] = true;
-                    obj.transform.SetParent(AttachmentPoints[i].transform, false);
+                    //obj.transform.SetParent(AttachmentPoints[i].transform, false);
+                    grabbable.PickUp(AttachmentPoints[i].transform);
+                    itemsOnPoints[i] = grabbable;
                     return true;
                 }
             }
@@ -103,7 +114,9 @@ public class AssemblyTable : MonoBehaviour
                 if (!attachmentPointUsed[i])
                 {
                     attachmentPointUsed[i] = true;
-                    obj.transform.SetParent(AttachmentPoints[i].transform, false);
+                    //obj.transform.SetParent(AttachmentPoints[i].transform, false);
+                    grabbable.PickUp(AttachmentPoints[i].transform);
+                    itemsOnPoints[i] = grabbable;
                     return true;
                 }
             }
@@ -152,9 +165,9 @@ public class AssemblyTable : MonoBehaviour
                     {
                         currentPriority++;
                         ResetAttachmentPoints();
-                        //spawnManager.Spawn();
                     }
                     break;
+
                 case 2:
                     bool foundNumbers = false;
 
@@ -231,10 +244,11 @@ public class AssemblyTable : MonoBehaviour
                     if (foundBell)
                     {
                         currentPriority++;
-                        ResetAttachmentPoints();
+                        ResetAttachmentPoints(true);
                         //spawnManager.Spawn();
                         //Clock clock = ClockFactory.instance.AssembleClock(smallHand, bigHand, frame, bell, numbers, cogs);
 
+                        // This doesn't actually MAKE a
                         GameObject finishedClock = new GameObject("New clock!");
 
                         finishedClock.AddComponent(typeof(Clock));
@@ -242,12 +256,15 @@ public class AssemblyTable : MonoBehaviour
                             .SetClockComponents(cogs, smallHand, bigHand, bell, frame, numbers);
 
                         ChallengeManager.instance.CheckChallengeComplete(finishedClock);
+
+                        Grabbable g = finishedClock.AddComponent<Grabbable>();
+                        g.PickUp(AssemblyPoint);
                     }
                     break;
             }
-        }
 
-        Debug.Log("Assembled!");
+            Debug.Log("Assembled!");
+        }
     }
 
     public void UsingScrewdriver()
@@ -300,6 +317,10 @@ public class AssemblyTable : MonoBehaviour
         {
             AttachmentPoints[minDistIndex].GetChild(0).SetParent(handsOfPlayerTryingToGetItem, false);
             attachmentPointUsed[minDistIndex] = false;
+            Grabbable itemToGive = itemsOnPoints[minDistIndex];
+            itemsOnPoints[minDistIndex] = null;
+            itemToGive.Drop();
+            itemToGive.PickUp(handsOfPlayerTryingToGetItem);
         }
     }
 
@@ -316,17 +337,39 @@ public class AssemblyTable : MonoBehaviour
         return false;
     }
 
-    void ResetAttachmentPoints()
+    void ResetAttachmentPoints(bool newClock = false)
     {
-        for (int i = 0; i < AttachmentPoints.Length; i++)
+        if (newClock)
         {
-            if (AttachmentPoints[i].childCount == 1)
+            for (int i = 0; i < AttachmentPoints.Length; i++)
             {
-                AttachmentPoints[i].DetachChildren();
-                //Destroy(AttachmentPoints[i].GetChild(0).gameObject);
+                if (itemsOnPoints[i] != null)
+                {
+                    Destroy(itemsOnPoints[i].gameObject);
+                    itemsOnPoints[i] = null;
+                }
+
+                attachmentPointUsed[i] = false;
             }
 
-            attachmentPointUsed[i] = false;
+            itemsOnAssemblyPoint.Clear();
+        }
+        else
+        {
+            for (int i = 0; i < AttachmentPoints.Length; i++)
+            {
+                if (itemsOnPoints[i] != null)
+                {
+                    itemsOnPoints[i].Drop();
+                    itemsOnPoints[i].PickUp(AssemblyPoint);
+
+                    itemsOnAssemblyPoint.Add(itemsOnPoints[i]);
+
+                    itemsOnPoints[i] = null;
+                }
+
+                attachmentPointUsed[i] = false;
+            }
         }
     }
 

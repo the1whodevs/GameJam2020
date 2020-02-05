@@ -278,6 +278,39 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(_joystick.interactButton))
             {
                 Debug.Log("Interacting with assembly table!");
+
+                if (holdingItem)
+                {
+                    Tool heldTool = itemHeld.GetComponent<Tool>();
+
+                    // "Grabbable" items are either Tools or ClockComponents. If we're not holding a tool,
+                    // we're holding a clock component that we can try placing on the table!
+                    if (!heldTool)
+                    {
+                        bool placedItem = AssemblyTable.instance.AddComponentToTable(itemHeld.gameObject);
+
+                        if (placedItem)
+                        {
+                            Debug.Log(name + " placed a ClockComponent on the assembly table!");
+                            holdingItem = false;
+                            itemHeld.Drop();
+                            itemHeld = null;
+                        }
+                        else
+                        {
+                            Debug.Log("Couldn't place clock component on table!");
+                        }  
+                    }
+                    else
+                    {
+                        heldTool.Use();
+                    }
+                }
+                // Try picking up something from the assembly table.
+                else
+                {
+
+                }
             }
         }
     }
